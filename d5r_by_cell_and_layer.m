@@ -82,20 +82,25 @@ function rslt = d5r_by_cell_and_layer( immuno_struct )
     PROP_R_D5R_cellmat(isnan(PROP_R_D5R_cellmat)) = 0 ;
                        
     figure();
+    set(gcf, 'Position', [100, 100, 300, 1200])
+    TickLabel_FontSize = 12; AxisLabel_FontSize = 14;
     CellLabels = {'Neurogranin', '', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin'};
     [layercount celltypecount] = size( PROP_R_D5R_cellmat );
     for i = 1:layercount
         subplot( layercount, 1, i ); 
-        barh( (PROP_R_D5R_cellmat( i, : ) .* 100) );
+        %vlineHandle = vline( 10, '-' ); set( vlineHandle, 'Color', [0.8 0.8 0.8] ); hold all;
+        barh( (PROP_R_D5R_cellmat( i, : ) .* 100), 'k' ); 
         %legend( CellLabels, 'Location','southoutside','Orientation','horizontal' );
         disp(num2str(sum(PROP_R_D5R_cellmat( i, : ))));
         ylabel( LayerStrings(i) );
-        set(gca,'YTickLabel', CellLabels);
-        set(gca,'Ydir','reverse')
-        xlim( [0,100] );
+        set(gca,'YTickLabel', CellLabels, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold', ...
+            'XTick', [0 10 25 50 75 100]);
+        box( gca, 'off');
+        xlim( [0,100] ); ylim( [0.5, 6.5] );
     end
-    xlabel( 'Percentage of D5R+ Neurons that are a specific inhibitory interneuron type' );
-    
+    xlabel( {'Percentage of D5R+ Neurons', 'by Cell Type'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold');
+    tightfig( gcf );
+    %hold off;
     
     %%%% FEF vs dlPFC BY LAYER
     d_D5R_NeuN_by_Layer  = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'dlPFC', 'B' ); 
