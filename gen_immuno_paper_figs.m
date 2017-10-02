@@ -159,16 +159,22 @@ function gen_immuno_paper_figs()
     legend( 'D1R', 'D2R');
     title( 'Cell Density by Layer / Normalized by NeuN ' );
     
-    %% FIGS FOR D5R PAPER
+    %% FIG1 FOR D5R PAPER
+    
+    TickLabel_FontSize = 14;
+    AxisLabel_FontSize = 18;
     
     % D5R by layer, irrespective of cell type: NeuN Stains Only
     D5R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'FEF', 'B' ); %%% Was D2`R
     D5R_by_Layer = D5R_by_Layer_struct.mean;
     figure();
+    set(gcf, 'Position', [100, 100, 1800, 750])
     subplot(1,2,1);
     b = barh( D5R_by_Layer' ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
-    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    xlabel( 'D5R Receptor Density on Neurons (NeuN+ Cells) (um^{-2})', 'FontSize', 16, 'FontWeight', 'bold' );
+    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 50000 100000 150000], ...
+        'FontWeight', 'bold' ); box( gca, 'off');
+    xlabel( 'D5R Receptor Density on NeuN+ Neurons (um^{2})', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
     text(xlim(2)*0.95, ylim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
@@ -179,16 +185,24 @@ function gen_immuno_paper_figs()
     D5R_Prop = D5R_by_Layer ./ NeuN_by_Layer;
     subplot(1,2,2);
     b = barh( D5R_Prop' ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
-    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    xlabel( 'Proportion of Neurons Expressing D5R', 'FontSize', 16, 'FontWeight', 'bold' );
+    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
+    'FontWeight', 'bold'  ); box( gca, 'off' );
+    xlabel( 'Proportion of NeuN+ Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    
+    tightfig( gcf );
+    
+    %% REMAINING FIGS FOR D5R PAPER
     
     % Do general chi sq here with multiple rows.
     
     % D5R density by cell type and layer ( and FEF/dlPFC by cell type and
     % layer comparison
+    
+    d5r_by_cell_and_layer_mark2( immuno_struct )
+    
     d5r_by_cell_and_layer( immuno_struct )
 
-    D5R_fef_and_dlPFC_Mark2( immuno_struct )
+    % D5R_fef_and_dlPFC_Mark2( immuno_struct )
 
     
     % D5R across different cell types (irrespective of layer)
