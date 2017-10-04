@@ -45,6 +45,9 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         subplot(3,2,i-1)
         barh( (Props .* 100), 'k' );
         
+        pval_string_NeuN = get_pval_string( Counts_Struct(i).VsNeuN_pVals );
+        text( Props .* 100 +5, 1:5, pval_string_NeuN, 'FontWeight', 'bold', 'FontSize', 11); 
+        
         TickLabel_FontSize = 12; AxisLabel_FontSize = 14;
         set( gca,'YTickLabel', LayerStrings, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'XTick', [0 25 50 75 100], ...
             'FontWeight', 'Bold' ); xlim( [0 100] );
@@ -55,16 +58,14 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
             ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
         end
         
-        %%% ADD Counts_Struct(i).VsNeuN_pVals
-        
-        
 %         subplot(1,2,2)
 %         barh( (Props( i, : ) .* 100) );
 %         title( strcat( Counts_Struct(i).celltype, {' '}, 'vs Layer-Agnostic' ) );
 %         ylabel( LayerStrings(i) );
 %         set(gca,'Ydir','reverse')
+%         pval_string_CTSum = get_pval_string( Counts_Struct(i).VsCTSum_pVals );
+%         text( Props .* 100 +5, 1:5, pval_string_CTSum, 'FontWeight', 'bold', 'FontSize', 11);
         
-        %%% ADD Counts_Struct(i).VsCTSum_pVals = p_val;
         
     end
     
@@ -72,6 +73,21 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     set(h1, 'FontSize', AxisLabel_FontSize + 2, 'FontWeight', 'Bold' );
     tightfig( gcf );
 
+end
+
+function rslt = get_pval_string( pvals )
+    rslt = {};
+    for i = 1:length( pvals )
+       if pvals(i) <= 0.001/50;
+           rslt{i} = '***';
+       elseif pvals(i) <= 0.01/50;
+           rslt{i} = '**';
+       elseif pvals(i) <= 0.05/50;  % Opportunity to Bonf. correct
+           rslt{i} = '*';
+       else
+           rslt{i} = []; 
+       end        
+    end
 end
 
 function rslt = calc_vs_CTXLayer_pvals( Counts_Struct )

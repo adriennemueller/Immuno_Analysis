@@ -163,31 +163,40 @@ function gen_immuno_paper_figs()
     
     TickLabel_FontSize = 14;
     AxisLabel_FontSize = 18;
+    SubFigureLabel_FontSize = 28;
     
     % D5R by layer, irrespective of cell type: NeuN Stains Only
     D5R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'FEF', 'B' ); %%% Was D2`R
     D5R_by_Layer = D5R_by_Layer_struct.mean;
     figure();
-    set(gcf, 'Position', [100, 100, 1800, 750])
+    set(gcf, 'Position', [100, 100, 1200, 500])
     subplot(1,2,1);
     b = barh( D5R_by_Layer' ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 50000 100000 150000], ...
         'FontWeight', 'bold' ); box( gca, 'off');
-    xlabel( 'D5R Receptor Density on NeuN+ Neurons (um^{2})', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    xlabel( {'D5R Receptor Density', 'on NeuN+ Neurons (um^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
     text(xlim(2)*0.95, ylim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
     
+    SubFigLabelBox_A = uicontrol('style','text');
+    set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
+        'Position', [1, 450, 30, 30]);
+        
     NeuN_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'FEF', 'C' );
     NeuN_by_Layer = NeuN_by_Layer_struct.mean;
     NeuN_by_Layer = NeuN_by_Layer + D5R_by_Layer;
     D5R_Prop = D5R_by_Layer ./ NeuN_by_Layer;
     subplot(1,2,2);
-    b = barh( D5R_Prop' ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
-    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
+    b = barh( D5R_Prop' .* 100 ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
+    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 25 50 75 100], ...
     'FontWeight', 'bold'  ); box( gca, 'off' );
-    xlabel( 'Proportion of NeuN+ Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    xlabel( {'Proportion of NeuN+ Neurons', 'Expressing D5R (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    
+    SubFigLabelBox_B = uicontrol('style','text');
+    set(SubFigLabelBox_B,'String','B', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
+        'Position', [530, 450, 30, 30]);
     
     tightfig( gcf );
     

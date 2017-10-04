@@ -98,7 +98,7 @@ function rslt = d5r_by_cell_and_layer( immuno_struct )
         box( gca, 'off');
         xlim( [0,100] ); ylim( [0.5, 6.5] );
     end
-    xlabel( {'Percentage of D5R+ Neurons', 'by Cell Type'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold');
+    xlabel( {'Proportion of D5R+ Neurons', 'by Cell Type (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold');
     tightfig( gcf );
     %hold off;
     

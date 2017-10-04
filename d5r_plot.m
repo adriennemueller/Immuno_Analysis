@@ -20,13 +20,13 @@ function rslt = d5r_plot( immuno_struct )
     
     % Plot
     figure();
-    set(gcf, 'Position', [100, 100, 500, 1000])
+    set(gcf, 'Position', [100, 100, 500, 1100])
     
     subplot( 2,1,1)
     bar( [D5R_SMI32 D5R_NRG], 'k' );       
     ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'SMI-32','Neurogranin'}, 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
-    ylabel( 'Percentage of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    ylabel( 'Proportion of Neurons Expressing D5R (%)', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     xlabel( '', 'FontSize', AxisLabel_FontSize );
     box(gca,'off');
     set(gca,'XTickLabelRotation',45);
@@ -42,7 +42,7 @@ function rslt = d5r_plot( immuno_struct )
     ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'Inhibitory', '', 'Parvalbumin','Calbindin', 'Calretinin', 'Somatostatin'}, ...
         'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
-    ylabel( 'Percentage of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    ylabel( 'Proportion of Neurons Expressing D5R (%)', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     xlabel( '', 'FontSize', AxisLabel_FontSize );
     box(gca,'off');
     set(gca,'XTickLabelRotation',45);
