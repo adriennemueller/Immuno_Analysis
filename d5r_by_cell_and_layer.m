@@ -89,7 +89,10 @@ function rslt = d5r_by_cell_and_layer( immuno_struct )
     for i = 1:layercount
         subplot( layercount, 1, i ); 
         %vlineHandle = vline( 10, '-' ); set( vlineHandle, 'Color', [0.8 0.8 0.8] ); hold all;
-        barh( (PROP_R_D5R_cellmat( i, : ) .* 100), 'k' ); 
+        barh( (PROP_R_D5R_cellmat( i, : ) .* 100), 'k' );
+         hold on;
+         barh( 1, PROP_R_D5R_cellmat( i, 1 ) .* 100, 'w');
+         hold off;
         %legend( CellLabels, 'Location','southoutside','Orientation','horizontal' );
         disp(num2str(sum(PROP_R_D5R_cellmat( i, : ))));
         ylabel( LayerStrings(i) );

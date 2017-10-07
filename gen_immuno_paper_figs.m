@@ -171,7 +171,7 @@ function gen_immuno_paper_figs()
     figure();
     set(gcf, 'Position', [100, 100, 1200, 500])
     subplot(1,2,1);
-    b = barh( D5R_by_Layer' ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
+    b = barh( D5R_by_Layer' ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 50000 100000 150000], ...
         'FontWeight', 'bold' ); box( gca, 'off');
     xlabel( {'D5R Receptor Density', 'on NeuN+ Neurons (um^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
@@ -189,7 +189,7 @@ function gen_immuno_paper_figs()
     NeuN_by_Layer = NeuN_by_Layer + D5R_by_Layer;
     D5R_Prop = D5R_by_Layer ./ NeuN_by_Layer;
     subplot(1,2,2);
-    b = barh( D5R_Prop' .* 100 ); b.FaceColor = 'k'; set(gca,'Ydir','reverse');
+    b = barh( D5R_Prop' .* 100 ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 25 50 75 100], ...
     'FontWeight', 'bold'  ); box( gca, 'off' );
     xlabel( {'Proportion of NeuN+ Neurons', 'Expressing D5R (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );

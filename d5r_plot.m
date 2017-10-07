@@ -23,7 +23,7 @@ function rslt = d5r_plot( immuno_struct )
     set(gcf, 'Position', [100, 100, 500, 1100])
     
     subplot( 2,1,1)
-    bar( [D5R_SMI32 D5R_NRG], 'k' );       
+    bar( [D5R_SMI32 D5R_NRG], 'w' );       
     ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'SMI-32','Neurogranin'}, 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
     ylabel( 'Proportion of Neurons Expressing D5R (%)', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
