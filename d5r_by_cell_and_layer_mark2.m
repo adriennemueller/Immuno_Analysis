@@ -2,7 +2,7 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
 
    
     % Loop through each cell type and get D5R/CT and CT_Total by layer
-    celltype_list = {'NeuN', 'SMI-32', 'Neurogranin', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin'};
+    celltype_list = {'NeuN', 'Neurogranin', 'SMI-32', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin'};
     
     Counts_Struct = struct;
     
@@ -27,6 +27,10 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     
     % Calculate stats compared to (average? across all layers?) values
     Counts_Struct = calc_vs_CTXLayer_pvals( Counts_Struct );
+    
+    % Calculate stats of chi sq comparing D5R expression across layers for
+    % a given cell type
+    Counts_Struct = calc_X_CTXLayer_pvals( Counts_Struct );
 
     
     figure();
@@ -45,17 +49,17 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         LayerStrings = {'I', 'II-III', 'IV', 'V', 'VI'};
         
         subplot(3,2,i-1)
-        barh( ([1:5] - 0.1), (NeuN_Props .* 100), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
+        barh( ([1:5] - 0.1), (NeuN_Props), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
         hold on;
-        barh( (Props .* 100), get_bar_col(i) );
+        barh( (Props), get_bar_col(i) );
         hold off;
         
-        pval_string_NeuN = get_pval_string( Counts_Struct(i).VsNeuN_pVals );
-        text( Props .* 100 +5, 1:5, pval_string_NeuN, 'FontWeight', 'bold', 'FontSize', 11); 
+        pval_string_NeuN = get_pval_string( Counts_Struct(i).VsNeuN_pVals, 50 );
+        text( Props +0.05, 1:5, pval_string_NeuN, 'FontWeight', 'bold', 'FontSize', 11); 
         
         TickLabel_FontSize = 12; AxisLabel_FontSize = 14;
-        set( gca, 'YTick', [1 2 3 4 5], 'YTickLabel', LayerStrings, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'XTick', [0 25 50 75 100], ...
-            'FontWeight', 'Bold' ); xlim( [0 100] );
+        set( gca, 'YTick', [1 2 3 4 5], 'YTickLabel', LayerStrings, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
+            'FontWeight', 'Bold' ); xlim( [0 1] );
         box( gca, 'off');
         
         xlabel(  strcat( Counts_Struct(i).celltype, '+' ), 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
@@ -70,13 +74,26 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
 %         set(gca,'Ydir','reverse')
 %         pval_string_CTSum = get_pval_string( Counts_Struct(i).VsCTSum_pVals );
 %         text( Props .* 100 +5, 1:5, pval_string_CTSum, 'FontWeight', 'bold', 'FontSize', 11);
-        
+
+
+        % Add pval for Across Layer Comparison
+        %sigstar( {[2, 5]}, Counts_Struct(i).X_CTXLayer_pval / 6); % Bonferonni Corrected
+        text( 0.8, 1, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5));
+        get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5)
 
     end
-    
+        
     [ax, h1] = suplabel( 'Proportion of Neurons Expressing D5R', 'x' );
     set(h1, 'FontSize', AxisLabel_FontSize + 2, 'FontWeight', 'Bold' );
     tightfig( gcf );
+
+    SubFigureLabel_FontSize = 24;
+    SubFigLabelBox_A = uicontrol('style','text');
+    set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
+        'Position', [2, 890, 30, 30]);
+    SubFigLabelBox_B = uicontrol('style','text');
+    set(SubFigLabelBox_B,'String','B', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
+        'Position', [2, 590, 30, 30]);
 
 end
 
@@ -88,19 +105,40 @@ function rslt = get_bar_col( idx )
     end
 end
 
-function rslt = get_pval_string( pvals )
+
+function rslt = get_pval_string( pvals, bonf_val )
     rslt = {};
     for i = 1:length( pvals )
-       if pvals(i) <= 0.001/50;
+       if pvals(i) <= 0.001/bonf_val;
            rslt{i} = '***';
-       elseif pvals(i) <= 0.01/50;
+       elseif pvals(i) <= 0.01/bonf_val;
            rslt{i} = '**';
-       elseif pvals(i) <= 0.05/50;  % Opportunity to Bonf. correct
+       elseif pvals(i) <= 0.05/bonf_val; 
            rslt{i} = '*';
        else
            rslt{i} = []; 
        end        
     end
+end
+
+% Make sure rows are layers and columns are D5R_CT and CT_Tot
+function rslt = calc_X_CTXLayer_pvals( Counts_Struct )
+ 
+    for i = 1:length(Counts_Struct)
+        
+        Col1 = Counts_Struct(i).D5R_CT_count(2:5)';
+        Col2 = Counts_Struct(i).CT_Total_count(2:5)';
+        
+        comp_mat = horzcat( Col1, Col2 );
+
+        p_val = general_chi_sq_test(comp_mat);
+
+        Counts_Struct(i).X_CTXLayer_pval = p_val;
+
+    end
+    
+    rslt = Counts_Struct;
+
 end
 
 function rslt = calc_vs_CTXLayer_pvals( Counts_Struct )
