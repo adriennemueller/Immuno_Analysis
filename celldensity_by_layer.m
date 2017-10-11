@@ -53,7 +53,7 @@ end
 
 function rslt = calc_um_per_layer( LayerDepths, Width, MaxY )
 
-    MaxY = MaxY * (512/465);
+%    MaxY = MaxY * (512/465);
 
     micronsPerPixel = 465/512;  %%% FACTOR THIS IN %%%
 
@@ -70,8 +70,8 @@ function rslt = calc_um_per_layer( LayerDepths, Width, MaxY )
     layerYs = ranges(:,2) - ranges(:,1);
     layerYs = micronsPerPixel .* layerYs;
     
-    Width = micronsPerPixel & Width;
+    Width = micronsPerPixel .* Width;
     
-    rslt = Width ./ layerYs;
+    rslt = Width .* layerYs;
     
 end

@@ -171,14 +171,14 @@ function gen_immuno_paper_figs()
     figure();
     set(gcf, 'Position', [100, 100, 1200, 500])
     subplot(1,2,1);
-    b = barh( D5R_by_Layer' ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
+    b = barh( D5R_by_Layer' * 1000000 ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 50000 100000 150000], ...
         'FontWeight', 'bold' ); box( gca, 'off');
     xlabel( {'D5R Receptor Density', 'on NeuN+ Neurons (um^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
-    text(xlim(2)*0.95, ylim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
+    text(ylim(2)*0.95, xlim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
     
     SubFigLabelBox_A = uicontrol('style','text');
     set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...

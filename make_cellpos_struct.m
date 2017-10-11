@@ -169,7 +169,7 @@ function rslt = get_img_dimensions( fullfname )
     curr_im_file = find_file_in_dir( folder, strToFind);
     if(~isempty(curr_im_file))
         curr_im = imread(strcat(folder,curr_im_file));
-        [img_x img_y] = size(curr_im);
+        [img_y img_x] = size(curr_im);
         rslt = [img_x img_y];
     end
 end
