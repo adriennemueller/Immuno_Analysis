@@ -180,7 +180,7 @@ function gen_immuno_paper_figs()
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
-    text(xlim(2)*0.95, ylim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
+    text(ylim(2)*0.95, xlim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
     
     SubFigLabelBox_A = uicontrol('style','text');
     set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
