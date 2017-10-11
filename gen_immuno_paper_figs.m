@@ -165,14 +165,16 @@ function gen_immuno_paper_figs()
     AxisLabel_FontSize = 18;
     SubFigureLabel_FontSize = 28;
     
+    mm_factor = 1000000;
+    
     % D5R by layer, irrespective of cell type: NeuN Stains Only
     D5R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'FEF', 'B' ); %%% Was D2`R
     D5R_by_Layer = D5R_by_Layer_struct.mean;
     figure();
     set(gcf, 'Position', [100, 100, 1200, 500])
     subplot(1,2,1);
-    b = barh( D5R_by_Layer' ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
-    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 50000 100000 150000], ...
+    b = barh( D5R_by_Layer' / mm_factor ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
+    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, ... 'XTick', [0 50000 100000 150000], ...
         'FontWeight', 'bold' ); box( gca, 'off');
     xlabel( {'D5R Receptor Density', 'on NeuN+ Neurons (um^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
@@ -189,16 +191,17 @@ function gen_immuno_paper_figs()
     NeuN_by_Layer = NeuN_by_Layer + D5R_by_Layer;
     D5R_Prop = D5R_by_Layer ./ NeuN_by_Layer;
     subplot(1,2,2);
-    b = barh( D5R_Prop' .* 100 ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
-    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 25 50 75 100], ...
+    b = barh( D5R_Prop' ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
+    set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
     'FontWeight', 'bold'  ); box( gca, 'off' );
-    xlabel( {'Proportion of NeuN+ Neurons', 'Expressing D5R (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    xlabel( {'Proportion of NeuN+ Neurons', 'Expressing D5R'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     SubFigLabelBox_B = uicontrol('style','text');
     set(SubFigLabelBox_B,'String','B', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
         'Position', [530, 450, 30, 30]);
     
     tightfig( gcf );
+    resize_paper_for_pdf( gcf );
     
     %% REMAINING FIGS FOR D5R PAPER
     

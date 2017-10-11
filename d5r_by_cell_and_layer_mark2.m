@@ -79,21 +79,41 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         % Add pval for Across Layer Comparison
         %sigstar( {[2, 5]}, Counts_Struct(i).X_CTXLayer_pval / 6); % Bonferonni Corrected
         text( 0.8, 1, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5));
-        get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5)
 
     end
         
-    [ax, h1] = suplabel( 'Proportion of Neurons Expressing D5R', 'x' );
-    set(h1, 'FontSize', AxisLabel_FontSize + 2, 'FontWeight', 'Bold' );
-    tightfig( gcf );
+%    ax = subplot(4,2, [7,8]);
+%    set( ax, 'Units', 'pixels' );
+    
+%    hsp1 = get(ax, 'OuterPosition')
+%    hsp1(4) = 5;
+%    set( ax, 'OuterPosition', hsp1 );
+    
+%     set(gca, 'visible', 'off')
+%     get( ax, 'PlotBoxAspectRatio' )
+%     set( ax, 'PlotBoxAspectRatio', [1 1 0.1] );
+%     xlabel( 'Proportion of Neurons Expressing D5R' );
+%     set(findall(gca, 'type', 'text'), 'visible', 'on')
+     
+    %tightfig( gcf );
 
     SubFigureLabel_FontSize = 24;
     SubFigLabelBox_A = uicontrol('style','text');
     set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
-        'Position', [2, 890, 30, 30]);
+        'Position', [2, 910, 30, 30]);
     SubFigLabelBox_B = uicontrol('style','text');
     set(SubFigLabelBox_B,'String','B', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
-        'Position', [2, 590, 30, 30]);
+        'Position', [2, 610, 30, 30]);
+
+    X_suplabel_A = uicontrol('style','text');
+    set(X_suplabel_A, 'String', 'Proportion of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize+1, ...
+        'FontWeight', 'Bold', 'BackgroundColor', 'white', 'Position', [130, 640, 400, 30]);
+    X_suplabel_B = uicontrol('style','text');
+    set(X_suplabel_B, 'String', 'Proportion of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize +1, ...
+       'FontWeight', 'Bold', 'BackgroundColor', 'white', 'Position', [130, 35, 400, 30]);
+    
+    % Fix so saving as pdf will be the right side.
+    resize_paper_for_pdf( gcf );
 
 end
 
@@ -104,7 +124,6 @@ function rslt = get_bar_col( idx )
         rslt = 'k';
     end
 end
-
 
 function rslt = get_pval_string( pvals, bonf_val )
     rslt = {};

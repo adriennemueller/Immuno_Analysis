@@ -23,10 +23,10 @@ function rslt = d5r_plot( immuno_struct )
     set(gcf, 'Position', [100, 100, 500, 1100])
     
     subplot( 2,1,1)
-    bar( [D5R_SMI32 D5R_NRG], 'w' );       
-    ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
-    set(gca,'XTickLabel',{'SMI-32','Neurogranin'}, 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
-    ylabel( 'Proportion of Neurons Expressing D5R (%)', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    bar( [D5R_NRG/100 D5R_SMI32/100], 'w' );       
+    ylim( [0 1] ); set(gca, 'ytick', [0:0.2:1]);
+    set(gca,'XTickLabel',{'Neurogranin', 'SMI-32'}, 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
+    ylabel( 'Proportion of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     xlabel( '', 'FontSize', AxisLabel_FontSize );
     box(gca,'off');
     set(gca,'XTickLabelRotation',45);
@@ -38,11 +38,11 @@ function rslt = d5r_plot( immuno_struct )
         
     
     subplot( 2,1,2)
-    bar( [D5R_Inhib 0 D5R_Parv D5R_Calb D5R_Calr D5R_Som], 'k' );       
-    ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
+    bar( [D5R_Inhib/100 0 D5R_Parv/100 D5R_Calb/100 D5R_Calr/100 D5R_Som/100], 'k' );       
+    ylim( [0 1] ); set(gca, 'ytick', [0:0.2:1]);
     set(gca,'XTickLabel',{'Inhibitory', '', 'Parvalbumin','Calbindin', 'Calretinin', 'Somatostatin'}, ...
         'FontSize', TickLabel_FontSize, 'FontWeight', 'bold');
-    ylabel( 'Proportion of Neurons Expressing D5R (%)', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    ylabel( 'Proportion of Neurons Expressing D5R', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     xlabel( '', 'FontSize', AxisLabel_FontSize );
     box(gca,'off');
     set(gca,'XTickLabelRotation',45);
@@ -61,6 +61,7 @@ function rslt = d5r_plot( immuno_struct )
     sigstar( {{'Parvalbumin','Calbindin'}, {'Calbindin', 'Calretinin'}, {'Calretinin', 'Parvalbumin'}}, [D5R_Inhib1_ChSq_pval D5R_Inhib2_ChSq_pval, D5R_Inhib3_ChSq_pval]);
 
     tightfig( gcf );
+    resize_paper_for_pdf( gcf );
 
 end
 

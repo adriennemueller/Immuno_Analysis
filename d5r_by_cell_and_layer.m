@@ -89,20 +89,21 @@ function rslt = d5r_by_cell_and_layer( immuno_struct )
     for i = 1:layercount
         subplot( layercount, 1, i ); 
         %vlineHandle = vline( 10, '-' ); set( vlineHandle, 'Color', [0.8 0.8 0.8] ); hold all;
-        barh( (PROP_R_D5R_cellmat( i, : ) .* 100), 'k' );
+        barh( (PROP_R_D5R_cellmat( i, : ) ), 'k' );
          hold on;
-         barh( 1, PROP_R_D5R_cellmat( i, 1 ) .* 100, 'w');
+         barh( 1, PROP_R_D5R_cellmat( i, 1 ), 'w');
          hold off;
         %legend( CellLabels, 'Location','southoutside','Orientation','horizontal' );
         disp(num2str(sum(PROP_R_D5R_cellmat( i, : ))));
         ylabel( LayerStrings(i) );
         set(gca,'YTickLabel', CellLabels, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'FontWeight', 'bold', ...
-            'XTick', [0 10 25 50 75 100]);
+            'XTick', [0 0.1 0.25 0.5 0.75 1]);
         box( gca, 'off');
-        xlim( [0,100] ); ylim( [0.5, 6.5] );
+        xlim( [0,1] ); ylim( [0.5, 6.5] );
     end
-    xlabel( {'Proportion of D5R+ Neurons', 'by Cell Type (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold');
+    xlabel( {'Proportion of D5R+ Neurons', 'by Cell Type'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold');
     tightfig( gcf );
+    resize_paper_for_pdf( gcf );
     %hold off;
     
     %%%% FEF vs dlPFC BY LAYER
