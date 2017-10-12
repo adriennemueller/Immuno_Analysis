@@ -47,6 +47,21 @@ function [substruct1, substruct2] = gen_substructs( immuno_struct, axis1, axis2 
     elseif strcmp( axis2, 'CalrParv' )
         substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Calretinin'));
         substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Parvalbumin'));
+    elseif strcmp( axis2, 'NRGInhib' )
+        substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Neurogranin'));
+        substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Inhibitory'));
+    elseif strcmp( axis2, 'NRGParv' )
+        substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Neurogranin'));
+        substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Parvalbumin'));
+    elseif strcmp( axis2, 'NRGCalb' )
+        substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Neurogranin'));
+        substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Calbindin'));
+    elseif strcmp( axis2, 'NRGCalr' )
+        substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Neurogranin'));
+        substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Calretinin'));
+    elseif strcmp( axis2, 'NRGSom' )
+        substruct1 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Neurogranin'));
+        substruct2 = immuno_struct( strcmp({immuno_struct.Stain1}, axis1) & strcmp({immuno_struct.Region}, 'FEF') & strcmp({immuno_struct.Stain2}, 'Somatostatin'));
     else
         disp( 'Do not recognize first axis.' );
     end

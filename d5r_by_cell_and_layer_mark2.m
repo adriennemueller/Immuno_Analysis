@@ -15,6 +15,7 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         label_string = strcat( 'D5R', {' '}, 'and', {' '}, celltype  );
         
         Counts_Struct(i).D5R_CT_count   = get_count( substruct, 'B' );
+        Counts_Struct(i).CT_Only_count  = get_count( substruct, 'C' );
         Counts_Struct(i).CT_Total_count = get_count( substruct, 'T' );
         
         Counts_Struct(i).D5R_CT_TotalXLayers   = sum( Counts_Struct(i).D5R_CT_count );
@@ -23,7 +24,7 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     end
   
     % Calculate stats compared to NeuN values
-    Counts_Struct = calc_vs_NeuN_pvals( Counts_Struct );
+    Counts_Struct = calc_vs_NRG_pvals( Counts_Struct );
     
     % Calculate stats compared to (average? across all layers?) values
     Counts_Struct = calc_vs_CTXLayer_pvals( Counts_Struct );
@@ -36,7 +37,7 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     figure();
     set(gcf, 'Position', [100, 100, 650, 1000])
     
-    NeuN_Props = Counts_Struct(1).D5R_CT_count ./ Counts_Struct(1).CT_Total_count;
+    NRG_Props = Counts_Struct(2).D5R_CT_count ./ Counts_Struct(2).CT_Total_count;
 
     % Plot indivdually, for each cell type - 
     for i = 1:length( Counts_Struct )
@@ -49,13 +50,15 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         LayerStrings = {'I', 'II-III', 'IV', 'V', 'VI'};
         
         subplot(3,2,i-1)
-        barh( ([1:5] - 0.1), (NeuN_Props), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
+        if i ~= 2 % SKIP NRG Plot
+            barh( ([1:5] - 0.1), (NRG_Props), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
+        end
         hold on;
         barh( (Props), get_bar_col(i) );
         hold off;
         
-        pval_string_NeuN = get_pval_string( Counts_Struct(i).VsNeuN_pVals, 50 );
-        text( Props +0.05, 1:5, pval_string_NeuN, 'FontWeight', 'bold', 'FontSize', 11); 
+        pval_string_NRG = get_pval_string( Counts_Struct(i).VsNRG_pVals, 50 );
+        text( Props +0.05, 1:5, pval_string_NRG, 'FontWeight', 'bold', 'FontSize', 11); 
         
         TickLabel_FontSize = 12; AxisLabel_FontSize = 14;
         set( gca, 'YTick', [1 2 3 4 5], 'YTickLabel', LayerStrings, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
@@ -114,6 +117,7 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     
     % Fix so saving as pdf will be the right side.
     resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, 'Fig3_D5R_By_CellType_and_Layer' );
 
 end
 
@@ -146,7 +150,7 @@ function rslt = calc_X_CTXLayer_pvals( Counts_Struct )
     for i = 1:length(Counts_Struct)
         
         Col1 = Counts_Struct(i).D5R_CT_count(2:5)';
-        Col2 = Counts_Struct(i).CT_Total_count(2:5)';
+        Col2 = Counts_Struct(i).CT_Only_count(2:5)';
         
         comp_mat = horzcat( Col1, Col2 );
 
@@ -185,28 +189,28 @@ function rslt = calc_vs_CTXLayer_pvals( Counts_Struct )
 
 end
 
-function rslt = calc_vs_NeuN_pvals( Counts_Struct )
+function rslt = calc_vs_NRG_pvals( Counts_Struct )
 
     % For each Cell type
     for i = 2:length(Counts_Struct)
         
-        D5R_NeuN_counts = Counts_Struct(1).D5R_CT_count;
-        NeuN_Tot_counts = Counts_Struct(1).CT_Total_count; 
+        D5R_NRG_counts = Counts_Struct(2).D5R_CT_count;
+        NRG_Only_counts = Counts_Struct(2).CT_Only_count; 
 
         D5R_CT_counts = Counts_Struct(i).D5R_CT_count;
-        CT_Tot_counts = Counts_Struct(i).CT_Total_count;
+        CT_Only_counts = Counts_Struct(i).CT_Only_count;
         
         p_vals = [];
         
     % Go through each layer
         for j = 1:length( D5R_CT_counts )
-            comp_mat = [ D5R_NeuN_counts(j) NeuN_Tot_counts(j);
-                         D5R_CT_counts(j)   CT_Tot_counts(j) ];
+            comp_mat = [ D5R_NRG_counts(j) NRG_Only_counts(j);
+                         D5R_CT_counts(j)   CT_Only_counts(j) ];
             % ChiSq vs NeuN
             p_val(j) = chi_sq_test(comp_mat);
         end
 
-        Counts_Struct(i).VsNeuN_pVals = p_val;
+        Counts_Struct(i).VsNRG_pVals = p_val;
     end
     rslt = Counts_Struct;
 end

@@ -173,10 +173,10 @@ function gen_immuno_paper_figs()
     figure();
     set(gcf, 'Position', [100, 100, 1200, 500])
     subplot(1,2,1);
-    b = barh( D5R_by_Layer' / mm_factor ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
+    b = barh( D5R_by_Layer' * mm_factor ); b.FaceColor = [0.8 0.8 0.8]; set(gca,'Ydir','reverse');
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, ... 'XTick', [0 50000 100000 150000], ...
         'FontWeight', 'bold' ); box( gca, 'off');
-    xlabel( {'D5R Receptor Density', 'on NeuN+ Neurons (um^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    xlabel( {'D5R+ NeuN+ Neuron Density (mm^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
@@ -184,7 +184,7 @@ function gen_immuno_paper_figs()
     
     SubFigLabelBox_A = uicontrol('style','text');
     set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
-        'Position', [1, 450, 30, 30]);
+        'Position', [1, 440, 30, 30]);
         
     NeuN_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D5R', 'NeuN', 'FEF', 'C' );
     NeuN_by_Layer = NeuN_by_Layer_struct.mean;
@@ -195,13 +195,16 @@ function gen_immuno_paper_figs()
     set(gca,'YTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'}, 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
     'FontWeight', 'bold'  ); box( gca, 'off' );
     xlabel( {'Proportion of NeuN+ Neurons', 'Expressing D5R'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
+    ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
     SubFigLabelBox_B = uicontrol('style','text');
     set(SubFigLabelBox_B,'String','B', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...
-        'Position', [530, 450, 30, 30]);
+        'Position', [530, 440, 30, 30]);
     
     tightfig( gcf );
     resize_paper_for_pdf( gcf );
+    
+    save_out_fig( gcf, 'Fig1_D5R_Density_Proportion' );
     
     %% REMAINING FIGS FOR D5R PAPER
     
