@@ -23,8 +23,9 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         
     end
   
-    % Calculate stats compared to NeuN values
+    % Calculate stats compared to SMI-32 values
     Counts_Struct = calc_vs_NRG_pvals( Counts_Struct );
+    Counts_Struct = calc_vs_SMI32_pvals( Counts_Struct );
     
     % Calculate stats compared to (average? across all layers?) values
     Counts_Struct = calc_vs_CTXLayer_pvals( Counts_Struct );
@@ -38,6 +39,8 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
     set(gcf, 'Position', [100, 100, 650, 1000])
     
     NRG_Props = Counts_Struct(2).D5R_CT_count ./ Counts_Struct(2).CT_Total_count;
+    SMI32_Props = Counts_Struct(3).D5R_CT_count ./ Counts_Struct(3).CT_Total_count;
+
 
     % Plot indivdually, for each cell type - 
     for i = 1:length( Counts_Struct )
@@ -50,15 +53,15 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
         LayerStrings = {'I', 'II-III', 'IV', 'V', 'VI'};
         
         subplot(3,2,i-1)
-        if i ~= 2 % SKIP NRG Plot
-            barh( ([1:5] - 0.1), (NRG_Props), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
+        if i ~= 3 % SKIP NRG Plot
+            barh( ([1:5] - 0.1), (SMI32_Props), 'FaceColor', [0.93 0.93 0.93], 'Edgecolor', 'none' );
         end
         hold on;
-        barh( (Props), get_bar_col(i) );
+        barh( (Props), 'FaceColor', get_bar_col(i) );
         hold off;
         
-        pval_string_NRG = get_pval_string( Counts_Struct(i).VsNRG_pVals, 50 );
-        text( Props +0.05, 1:5, pval_string_NRG, 'FontWeight', 'bold', 'FontSize', 11); 
+        pval_string_SMI32 = get_pval_string( Counts_Struct(i).VsSMI32_pVals, 50 );
+        text( Props +0.05, 1:5, pval_string_SMI32, 'FontWeight', 'bold', 'FontSize', 11); 
         
         TickLabel_FontSize = 12; AxisLabel_FontSize = 14;
         set( gca, 'YTick', [1 2 3 4 5], 'YTickLabel', LayerStrings, 'Ydir','reverse', 'FontSize', TickLabel_FontSize, 'XTick', [0 0.25 0.5 0.75 1], ...
@@ -81,7 +84,12 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
 
         % Add pval for Across Layer Comparison
         %sigstar( {[2, 5]}, Counts_Struct(i).X_CTXLayer_pval / 6); % Bonferonni Corrected
-        text( 0.8, 1, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5));
+        text( 0.9, 1.3, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5));
+        if i == 6
+            hold on;
+                plot( [0.93 0.93], [1.5, 5.5], '-k', 'LineWidth', 2 );
+            hold off;
+        end
 
     end
         
@@ -122,8 +130,10 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
 end
 
 function rslt = get_bar_col( idx )
-    if (idx == 2) || (idx == 3)
+    if (idx == 2)
         rslt = 'w';
+    elseif (idx == 3)
+        rslt = [0.93 0.93 0.93];
     else
         rslt = 'k';
     end
@@ -207,13 +217,42 @@ function rslt = calc_vs_NRG_pvals( Counts_Struct )
             comp_mat = [ D5R_NRG_counts(j) NRG_Only_counts(j);
                          D5R_CT_counts(j)   CT_Only_counts(j) ];
             % ChiSq vs NeuN
-            p_val(j) = chi_sq_test(comp_mat);
+            p_val(j) = general_chi_sq_test(comp_mat);
         end
 
         Counts_Struct(i).VsNRG_pVals = p_val;
     end
     rslt = Counts_Struct;
 end
+
+function rslt = calc_vs_SMI32_pvals( Counts_Struct )
+
+    ct_compare_list = [2 4 5 6 7];
+
+    % For each Cell type
+    for i = 2:length(Counts_Struct)
+        
+        D5R_SMI32_counts = Counts_Struct(3).D5R_CT_count;
+        SMI32_Only_counts = Counts_Struct(3).CT_Only_count; 
+
+        D5R_CT_counts = Counts_Struct(i).D5R_CT_count;
+        CT_Only_counts = Counts_Struct(i).CT_Only_count;
+        
+        p_vals = [];
+        
+    % Go through each layer
+        for j = 1:length( D5R_CT_counts )
+            comp_mat = [ D5R_SMI32_counts(j) SMI32_Only_counts(j);
+                         D5R_CT_counts(j)   CT_Only_counts(j) ];
+            % ChiSq vs NeuN
+            p_val(j) = general_chi_sq_test(comp_mat);
+        end
+
+        Counts_Struct(i).VsSMI32_pVals = p_val;
+    end
+    rslt = Counts_Struct;
+end
+
 
 % Get Counts by layer for Receptor/CT or CT_Total.
 % Receptor/CT type = 'B';

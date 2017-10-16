@@ -75,6 +75,24 @@ function rslt = d5r_plot( immuno_struct )
     D5R_NRGSom_cell_mat = round(sum( D5R_NRGSom_cell_mat, 3));
     [h_ignore D5R_NRGSom_ChSq_pval stats_ignore] = fishertest( D5R_NRGSom_cell_mat );
     
+    %SMI32 vs Inhibs
+    D5R_SMI32Inhib_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D5R', 'SMI32Inhib' );
+    D5R_SMI32Inhib_ChSq_pval = general_chi_sq_test( D5R_SMI32Inhib_cell_mat );
+    
+    D5R_SMI32Parv_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D5R', 'SMI32Parv' );
+    D5R_SMI32Parv_ChSq_pval = general_chi_sq_test( D5R_SMI32Parv_cell_mat );
+    
+    D5R_SMI32Calb_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D5R', 'SMI32Calb' );
+    D5R_SMI32Calb_ChSq_pval = general_chi_sq_test( D5R_SMI32Calb_cell_mat );
+    
+    D5R_SMI32Calr_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D5R', 'SMI32Calr' );
+    D5R_SMI32Calr_ChSq_pval = general_chi_sq_test( D5R_SMI32Calr_cell_mat );
+    
+    D5R_SMI32Som_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D5R', 'SMI32Som' );
+    D5R_SMI32Som_cell_mat = round(sum( D5R_SMI32Som_cell_mat, 3));
+    [h_ignore D5R_SMI32Som_ChSq_pval stats_ignore] = fishertest( D5R_SMI32Som_cell_mat );
+    
+    
     sigstar( {{'Parvalbumin','Calbindin'}, {'Calbindin', 'Calretinin'}, {'Calretinin', 'Parvalbumin'}}, [D5R_Inhib1_ChSq_pval D5R_Inhib2_ChSq_pval, D5R_Inhib3_ChSq_pval]);
 
     tightfig( gcf );
