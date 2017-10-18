@@ -84,10 +84,10 @@ function rslt = d5r_by_cell_and_layer_mark2( immuno_struct )
 
         % Add pval for Across Layer Comparison
         %sigstar( {[2, 5]}, Counts_Struct(i).X_CTXLayer_pval / 6); % Bonferonni Corrected
-        text( 0.9, 1.3, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 5));
+        text( 0.97, 3.5, get_pval_string( Counts_Struct(i).X_CTXLayer_pval, 4));
         if i == 6
             hold on;
-                plot( [0.93 0.93], [1.5, 5.5], '-k', 'LineWidth', 2 );
+                plot( [0.96 0.96], [1.5, 5.5], '-k', 'LineWidth', 1.5 );
             hold off;
         end
 
