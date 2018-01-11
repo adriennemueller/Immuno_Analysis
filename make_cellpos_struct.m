@@ -2,7 +2,7 @@ function rslt = make_cellpos_struct()
 
     rslt = struct;    
 
-    folder = '/Volumes/Olaf/Papers/Dopamine Receptor Expression/Quantification Images/';
+    folder = '/Volumes/Hnoss/Papers/Dopamine Receptor Expression/Quantification Images/';
     % Get a list of all files in the folder with the desired file name pattern.
     filelist_struct = findfiles( folder, '*.xml' );
     filelist = {filelist_struct.name};

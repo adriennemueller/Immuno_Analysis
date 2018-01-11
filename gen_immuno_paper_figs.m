@@ -139,21 +139,28 @@ function gen_immuno_paper_figs()
     %% D1R vs D2R, By Layer
 
     
-    D1R_by_Layer = celldensity_by_layer( immuno_struct, 'D1R', 'all', 'FEF', 'R' );
-    D2R_by_Layer = celldensity_by_layer( immuno_struct, 'D2R', 'all', 'FEF', 'R' ); %%% Was D2R
-    D5R_by_Layer = celldensity_by_layer( immuno_struct, 'D5R', 'all', 'FEF', 'R' ); %%% Was D2R
-    
+    D1R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D1R', 'all', 'FEF', 'R' );
+    D1R_by_Layer = D1R_by_Layer_struct.mean;
+
+    D2R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D2R', 'all', 'FEF', 'R' );
+    D2R_by_Layer = D2R_by_Layer_struct.mean;
+
     % Norm by NeuN
-    NeuN_by_Layer = celldensity_by_layer( immuno_struct, 'all', 'NeuN', 'FEF', 'C' );
+    NeuN_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'NeuN', 'FEF', 'C' );
+    NeuN_by_Layer = NeuN_by_Layer_struct.mean;
+
     D1R_by_Layer = D1R_by_Layer ./ NeuN_by_Layer;
     D2R_by_Layer = D2R_by_Layer ./ NeuN_by_Layer;
     
+    
+    mm_factor = 1000000;
+
     figure();
     green_col = [0 0.8 0];
-    b = bar( [D1R_by_Layer; D2R_by_Layer]' ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
     %ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    ylabel( 'Receptor Density (um^{-2})', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( 'Density of Neurons Expressing Receptor (/mm^{2})', 'FontSize', 16, 'FontWeight', 'bold' );
     %set(gca,'XTickLabelRotation',45);
     set(gca,'FontSize',14, 'FontWeight', 'bold');
     legend( 'D1R', 'D2R');
