@@ -138,6 +138,41 @@ function gen_immuno_paper_figs()
     
     %% D1R vs D2R, By Layer
 
+    Counts_Struct = struct;
+
+    % D1R 
+    D1_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D1R') & strcmp({immuno_struct.Region}, 'FEF'));
+    Counts_Struct.D1_CT_Total_count = get_count( D1_substruct, 'TR' );
+    Counts_Struct.D1_CT_Total_TotalXLayers = sum( Counts_Struct.D1_CT_Total_count ); 
+    D1R_By_Layer = Counts_Struct.D1_CT_Total_count ./ Counts_Struct.D1_CT_Total_TotalXLayers;
+    
+    % D2R 
+    D2_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D2R') & strcmp({immuno_struct.Region}, 'FEF'));
+    Counts_Struct.D2_CT_Total_count = get_count( D2_substruct, 'TR' );
+    Counts_Struct.D2_CT_Total_TotalXLayers = sum( Counts_Struct.D2_CT_Total_count ); 
+    D2R_By_Layer = Counts_Struct.D2_CT_Total_count ./ Counts_Struct.D2_CT_Total_TotalXLayers;
+     
+    % NeuN
+    NeuN_substruct = immuno_struct(strcmp({immuno_struct.Stain2}, 'NeuN') & strcmp({immuno_struct.Region}, 'FEF'));
+    Counts_Struct.NeuN_CT_Total_count = get_count( NeuN_substruct, 'T' );
+    Counts_Struct.NeuN_CT_Total_TotalXLayers = sum( Counts_Struct.NeuN_CT_Total_count ); 
+    NeuN_By_Layer = Counts_Struct.NeuN_CT_Total_count ./ Counts_Struct.NeuN_CT_Total_TotalXLayers;
+    
+    D1R_By_Layer_Norm = D1R_By_Layer ./ NeuN_By_Layer;
+    D2R_By_Layer_Norm = D2R_By_Layer ./ NeuN_By_Layer; 
+    
+    figure();
+    mm_factor = 1000000;
+    green_col = [0 0.8 0];
+    b = bar( [D1R_By_Layer; D2R_By_Layer]' .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+  
+    figure();
+    mm_factor = 1000000;
+    green_col = [0 0.8 0];
+    b = bar( [D1R_By_Layer_Norm; D2R_By_Layer_Norm]' .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    
+    
+ %%    D1R vs D2R, By Layer - OLD VERSION - 
     
     D1R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D1R', 'all', 'FEF', 'R' );
     D1R_by_Layer = D1R_by_Layer_struct.mean;

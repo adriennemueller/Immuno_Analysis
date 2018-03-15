@@ -8,6 +8,8 @@ function gen_tracer_barplot()
     D1RNeg_Total = ts.D1RNeg_Total;
     D2RPos_Total = ts.D2RPos_Total;
     D2RNeg_Total = ts.D2RNeg_Total;
+    D1RCount_Total = ts.D1RCount_Total;
+    D2RCount_Total = ts.D2RCount_Total;
     
     Expression_Mat = [ D1RPos_Total D1RNeg_Total;
                        D2RPos_Total D2RNeg_Total ];
@@ -21,8 +23,14 @@ function gen_tracer_barplot()
         
     figure();
     set(gcf, 'Position', [500, 500, 550, 500])
-    bar([D1R_Frac*100, D2R_Frac*100], 'k' );
+    b = bar([D1R_Frac*100, D2R_Frac*100], 'k' );
     sigstar({[1,2]}, pval);
+    
+%     green_col = [0 0.8 0];
+%     %b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+%     set(b(1), 'facecolor', green_col ); 
+%     set(b(2), 'facecolor', 'b' ); 
+%     
     
     TickLabel_FontSize = 14; AxisLabel_FontSize = 16;
         

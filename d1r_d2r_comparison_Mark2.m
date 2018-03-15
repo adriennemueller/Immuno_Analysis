@@ -40,10 +40,12 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     % P-Values and Significance Plots 
     %ctr2 = bsxfun(@plus, b(2).XData, [b(2).XOffset]');
     D1R_SMI32_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D1RD2R', 'SMI-32' );
-    D1R_SMI32_pval = cochran_mantel_haenszel_test( D1R_SMI32_cell_mat, 1 );
+    % D1R_SMI32_pval = cochran_mantel_haenszel_test( D1R_SMI32_cell_mat, 1 );
+    D1R_SMI32_pval  = general_chi_sq_test( D1R_SMI32_cell_mat );
     
     D1R_NRG_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D1RD2R', 'Neurogranin' );
-    D1R_NRG_pval = cochran_mantel_haenszel_test( D1R_NRG_cell_mat, 1 );
+    %D1R_NRG_pval = cochran_mantel_haenszel_test( D1R_NRG_cell_mat, 1 );
+    D1R_NRG_pval  = general_chi_sq_test( D1R_NRG_cell_mat );
     
     xpos1 = [b(1).XData(1) + b(1).XOffset, b(1).XData(1) + b(2).XOffset];
     xpos2 = [b(1).XData(2) + b(1).XOffset, b(1).XData(2) + b(2).XOffset];
@@ -64,7 +66,8 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     pval_list = [];
     for i = 1:length(celltype_list)
         cell_mat = gen_CMH_cell_mat( immuno_struct, 'D1RD2R', celltype_list(i) );
-        pval_list(i) = cochran_mantel_haenszel_test( cell_mat, 1 );
+        %pval_list(i) = cochran_mantel_haenszel_test( cell_mat, 1 );
+        pval_list(i) = general_chi_sq_test( cell_mat );
     end
     
     %Figure out how to do cellfun for this
