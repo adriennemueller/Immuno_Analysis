@@ -38,6 +38,22 @@ function rslt = celldensity_by_layer( sectionstruct, receptor, celltype, region,
                 cellden_mat = horzcat( cellden_mat, curr_cell_den );
                 n_cells = n_cells + sum(counts); n_sections = n_sections +1; 
             end
+        elseif strcmp( type, 'TC')
+            if ~ isempty( substruct(i).CountsByLayer )
+                counts = substruct(i).CountsByLayer(3,:) + substruct(i).CountsByLayer(2,:);
+                micronsPerLayer = calc_um_per_layer( substruct(i).LayerDepths, substruct(i).img_x, substruct(i).img_y );
+                curr_cell_den = counts' ./ micronsPerLayer;
+                cellden_mat = horzcat( cellden_mat, curr_cell_den );
+                n_cells = n_cells + sum(counts); n_sections = n_sections +1; 
+            end
+         elseif strcmp( type, 'TR')
+            if ~ isempty( substruct(i).CountsByLayer )
+                counts = substruct(i).CountsByLayer(3,:) + substruct(i).CountsByLayer(1,:);
+                micronsPerLayer = calc_um_per_layer( substruct(i).LayerDepths, substruct(i).img_x, substruct(i).img_y );
+                curr_cell_den = counts' ./ micronsPerLayer;
+                cellden_mat = horzcat( cellden_mat, curr_cell_den );
+                n_cells = n_cells + sum(counts); n_sections = n_sections +1; 
+            end           
         else
             disp( 'Unrecognized type.' );
         end
