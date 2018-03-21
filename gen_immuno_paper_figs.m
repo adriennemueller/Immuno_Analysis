@@ -136,7 +136,79 @@ function gen_immuno_paper_figs()
     legend( [ h(3) h(1) ], {'D1R','D2R'} );
     
     
-    %% D1R vs D2R, By Layer
+    %% D1R vs D2R, By Layer - With ErrorBars and PVal
+    
+    D1_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D1R') & strcmp({immuno_struct.Region}, 'FEF'));
+    d1_dens = get_density_individ( D1_substruct, 'TR' );
+   
+    D2_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D2R') & strcmp({immuno_struct.Region}, 'FEF'));
+    d2_dens = get_density_individ( D2_substruct, 'TR' );
+    
+    d1_means = mean( d1_dens, 1 );
+    d2_means = mean( d2_dens, 1 );
+    
+    d1_std = std( d1_dens, 1);
+    d2_std = std( d2_dens, 1);
+    
+    d1_ste = d1_std ./ sqrt( length(d1_dens) );
+    d2_ste = d2_std ./ sqrt( length(d2_dens) );
+       
+    
+    green_col = [0 0.8 0];
+    mm_factor = 1000000;
+    figure();
+    b = barwitherr( [d1_ste', d2_ste'].* mm_factor, [d1_means', d2_means' ] .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    
+    set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
+    ylabel( 'Density of Neurons Expressing Receptor (/mm^{2})', 'FontSize', 16, 'FontWeight', 'bold' );
+    set(gca,'FontSize',14, 'FontWeight', 'bold');
+    legend( 'D1R', 'D2R');
+    title( 'Cell Density by Layer ' );
+
+    [tmp pvals] = ttest2( d1_dens, d2_dens, 'Dim', 1 );
+    
+    pval_strings = get_pval_string(pvals, 0.05/5);
+    text( 1:5, d1_means .* mm_factor + 10, pval_strings, 'FontWeight', 'bold', 'FontSize', 11); 
+        
+    
+    %% D1R vs D2R, By Layer - Normalized by total number so can compare within R, across layers
+    
+    D1_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D1R') & strcmp({immuno_struct.Region}, 'FEF'));
+    d1_dens = get_density_individ( D1_substruct, 'TR' );
+    d1_section_totals = sum( d1_dens, 2);
+    norm_d1_dens = bsxfun( @rdivide, d1_dens, d1_section_totals);
+    d1_means = mean( norm_d1_dens, 1 );
+    
+    D2_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D2R') & strcmp({immuno_struct.Region}, 'FEF'));
+    d2_dens = get_density_individ( D2_substruct, 'TR' );
+    d2_section_totals = sum( d2_dens, 2);
+    norm_d2_dens = bsxfun( @rdivide, d2_dens, d2_section_totals);
+    d2_means = mean( norm_d2_dens, 1 );
+
+    green_col = [0 0.8 0];
+    figure();
+    b = bar( [d1_means', d2_means' ] ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    set(gca,'XTickLabel',{'I' 'II-III' 'IV' 'V' 'VI'});
+    %ylabel( 'Density of Neurons Expressing Receptor (/mm^{2})', 'FontSize', 16, 'FontWeight', 'bold' );
+    set(gca,'FontSize',14, 'FontWeight', 'bold');
+    legend( 'D1R', 'D2R');
+    %title( 'Cell Density by Layer ' );
+    
+    % Do pval D1R 
+    [tmp pval_d1_l2vl4] = ttest2( norm_d1_dens( :,2 ), norm_d1_dens( :,3 ) );
+    [tmp pval_d1_l2vl5] = ttest2( norm_d1_dens( :,2 ), [norm_d1_dens( :,4 ) );
+    [tmp pval_d1_l2vl6] = ttest2( norm_d1_dens( :,2 ), norm_d1_dens( :,5 ) );
+    
+    % pval D2Rs
+    [tmp pval_d2_l2vl4] = ttest2( norm_d2_dens( :,2 ), norm_d2_dens( :,3 ) );
+    [tmp pval_d2_l2vl5] = ttest2( norm_d2_dens( :,2 ), norm_d2_dens( :,4 ) );
+    [tmp pval_d2_l2vl6] = ttest2( norm_d2_dens( :,2 ), norm_d2_dens( :,5 ) );
+
+    %bar([5,2,1.5])
+    %sigstar({[1,2], [1,3]})
+    
+    
+    %% D1R vs D2R, By Layer - incomplete
 
     Counts_Struct = struct;
 
@@ -221,8 +293,8 @@ function gen_immuno_paper_figs()
     xlabel( {'D5R+ NeuN+ Neuron Density (mm^{2})'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     ylabel( 'Cortical Layer', 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
     
-    ylim = get(gca,'ylim'); xlim = get(gca,'xlim');
-    text(ylim(2)*0.95, xlim(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
+    ylims = get(gca,'ylim'); xlims = get(gca,'xlim');
+    text(ylims(2)*0.95, xlims(2)*0.95, strcat( 'n = ', num2str(D5R_by_Layer_struct.n_cells), ', ', {' '}, num2str(D5R_by_Layer_struct.n_sections) ), 'FontWeight', 'bold', 'FontSize', 12, 'HorizontalAlignment', 'right');
     
     SubFigLabelBox_A = uicontrol('style','text');
     set(SubFigLabelBox_A,'String','A', 'FontSize', SubFigureLabel_FontSize, 'BackgroundColor', 'white', ...

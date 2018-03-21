@@ -139,20 +139,6 @@ function rslt = get_bar_col( idx )
     end
 end
 
-function rslt = get_pval_string( pvals, bonf_val )
-    rslt = {};
-    for i = 1:length( pvals )
-       if pvals(i) <= 0.001/bonf_val;
-           rslt{i} = '***';
-       elseif pvals(i) <= 0.01/bonf_val;
-           rslt{i} = '**';
-       elseif pvals(i) <= 0.05/bonf_val; 
-           rslt{i} = '*';
-       else
-           rslt{i} = []; 
-       end        
-    end
-end
 
 % Make sure rows are layers and columns are D5R_CT and CT_Tot
 function rslt = calc_X_CTXLayer_pvals( Counts_Struct )

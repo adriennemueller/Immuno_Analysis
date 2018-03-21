@@ -31,7 +31,7 @@ function cellden_mat = get_density_individ( substruct, type )
             cellden_mat = vertcat( cellden_mat, curr_cell_den );
             
         end
-              
+            
     end
 end
 
