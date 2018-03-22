@@ -1,4 +1,4 @@
-function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
+function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
 
    
     % Loop through each cell type and get D5R/CT and CT_Total by layer
@@ -31,9 +31,11 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
 
         
     end
+    
+    celltype_idx = find(strcmp(sel_celltype, celltype_list));
   
     % Calculate stats compared to SMI-32 values
-    NRG_pvals = calc_NRG_pvals( Counts_Struct );
+    CT_pvals = calc_CT_pvals( Counts_Struct, celltype_idx );
     %Counts_Struct = calc_SMI32_pvals( Counts_Struct );
     
     % Calculate stats compared to (average? across all layers?) values
@@ -45,12 +47,12 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
 
         % NRG vs D1R or vs D2R - ACROSS LAYERS
     D1R_ctx_pvals = [];
-    D1R_l2_D1R = Counts_Struct(2).D1R_CT_count(2)';
-    D1R_l2_CT  = Counts_Struct(2).D1R_CT_Only_count(2)';
+    D1R_l2_D1R = Counts_Struct(celltype_idx).D1R_CT_count(2)';
+    D1R_l2_CT  = Counts_Struct(celltype_idx).D1R_CT_Only_count(2)';
 
     D2R_ctx_pvals = [];
-    D2R_l2_D2R = Counts_Struct(2).D2R_CT_count(2)';
-    D2R_l2_CT  = Counts_Struct(2).D2R_CT_Only_count(2)';
+    D2R_l2_D2R = Counts_Struct(celltype_idx).D2R_CT_count(2)';
+    D2R_l2_CT  = Counts_Struct(celltype_idx).D2R_CT_Only_count(2)';
 
     for i = 3:5 % For comparing layer 2 to layers 4, 5 and 6
         D1R_lx_D1R = Counts_Struct(2).D1R_CT_count(i)';
@@ -70,12 +72,12 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
     figure();
     set(gcf, 'Position', [100, 100, 800, 700])
     
-    D1R_NRG_Props = Counts_Struct(2).D1R_CT_count ./ Counts_Struct(2).D1R_CT_Total_count;
-    D2R_NRG_Props = Counts_Struct(2).D2R_CT_count ./ Counts_Struct(2).D2R_CT_Total_count;
+    D1R_CT_Props = Counts_Struct(celltype_idx).D1R_CT_count ./ Counts_Struct(celltype_idx).D1R_CT_Total_count;
+    D2R_CT_Props = Counts_Struct(celltype_idx).D2R_CT_count ./ Counts_Struct(celltype_idx).D2R_CT_Total_count;
     %SMI32_Props = Counts_Struct(3).D5R_CT_count ./ Counts_Struct(3).CT_Total_count;
 
     green_col = [0 0.8 0];
-    b = bar( [D1R_NRG_Props' D2R_NRG_Props'] ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    b = bar( [D1R_CT_Props' D2R_CT_Props'] ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
     
     %%% DR/NRG - Across cortical layers:
     %D1R_l2_D1R = Counts_Struct(2).D1R_CT_count(2:5)';
@@ -87,19 +89,20 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
     % Add D1R/D2R Comp lines
     bwidth = get(b, 'BarWidth');
     vertspace = 0.03;
+    higher_props = max( [D1R_CT_Props; D2R_CT_Props] );
     
     for i = 2:5
         leftx  = i - bwidth{1}/4;
         rightx = i + bwidth{1}/4;
-        line( [leftx rightx], [ D1R_NRG_Props(i) D1R_NRG_Props(i) ] + vertspace, 'LineWidth', 3, 'Color', 'black' );
+        line( [leftx rightx], [ higher_props(i) higher_props(i) ] + vertspace, 'LineWidth', 3, 'Color', 'black' );
     end
-    pval_strings = get_pval_string(NRG_pvals, 5);
-    text( 1:5, D1R_NRG_Props + 2*vertspace, pval_strings, 'FontWeight', 'bold', 'FontSize', 11, 'HorizontalAlignment', 'Center');
+    pval_strings = get_pval_string(CT_pvals, 5);
+    text( 1:5, higher_props + vertspace + vertspace/2.5, pval_strings, 'FontWeight', 'bold', 'FontSize', 11, 'HorizontalAlignment', 'Center');
   
     %%% Add Green D1R Lines
     d1_leftx = 2 - bwidth{1}/4;
     d2_leftx = 2 + bwidth{1}/4;
-    top_of_bar = max( D1R_NRG_Props );
+    top_of_bar = max( [D1R_CT_Props, D2R_CT_Props] );
     for i = 3:5
         d1_rightx = i - bwidth{1}/4;
         line( [d1_leftx d1_rightx], [ top_of_bar top_of_bar ] + i * vertspace, ...
@@ -119,7 +122,7 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
     
     % Other Plot Prettiness
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    ylabel( 'Proportion of NRG+ Neurons Expressing Receptor', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( strcat( 'Proportion of', {' '}, sel_celltype, {'+ '}, 'Neurons Expressing Receptor'), 'FontSize', 16, 'FontWeight', 'bold' );
     set(gca,'FontSize',14, 'FontWeight', 'bold');
     legend( 'D1R', 'D2R', 'Location', 'northwest');
     ylim([ 0 1.3]);
@@ -129,25 +132,25 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
 
     % Fix so saving as pdf will be the right size.
     resize_paper_for_pdf( gcf );
-    save_out_fig( gcf, 'Fig1_D1R_D2R_NRG_Proportions_By_Layer' );
+    save_out_fig( gcf, strcat('Fig1_D1R_D2R_', sel_celltype, '_Proportions_By_Layer') );
 
 end
 
-function rslt = calc_NRG_pvals( Counts_Struct )
+function rslt = calc_CT_pvals( Counts_Struct, ct_idx )
 
     % For each Cell type
-    D1R_NRG_counts      = Counts_Struct(2).D1R_CT_count;
-    D1R_NRG_Only_counts = Counts_Struct(2).D1R_CT_Only_count; 
+    D1R_CT_counts      = Counts_Struct(ct_idx).D1R_CT_count;
+    D1R_CT_Only_counts = Counts_Struct(ct_idx).D1R_CT_Only_count; 
 
-    D2R_NRG_counts      = Counts_Struct(2).D2R_CT_count;
-    D2R_NRG_Only_counts = Counts_Struct(2).D2R_CT_Only_count; 
+    D2R_CT_counts      = Counts_Struct(ct_idx).D2R_CT_count;
+    D2R_CT_Only_counts = Counts_Struct(ct_idx).D2R_CT_Only_count; 
         
     p_vals = [];
         
     % Go through each layer
-    for j = 1:length( D1R_NRG_counts )
-        comp_mat = [ D1R_NRG_counts(j) D1R_NRG_Only_counts(j);
-                     D2R_NRG_counts(j) D2R_NRG_Only_counts(j) ];
+    for j = 1:length( D1R_CT_counts )
+        comp_mat = [ D1R_CT_counts(j) D1R_CT_Only_counts(j);
+                     D2R_CT_counts(j) D2R_CT_Only_counts(j) ];
         % ChiSq vs NeuN
         p_vals(j) = general_chi_sq_test(comp_mat);
     end

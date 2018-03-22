@@ -169,7 +169,12 @@ function gen_immuno_paper_figs()
     
     pval_strings = get_pval_string(pvals, 0.05/5);
     text( 1:5, d1_means .* mm_factor + 10, pval_strings, 'FontWeight', 'bold', 'FontSize', 11); 
-        
+    
+    % Fix so saving as pdf will be the right size.
+    tightfig( gcf );
+    resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, 'Fig1_D1R_D2R_Densities_By_Layer' );
+    
     
     %% D1R vs D2R, By Layer - Normalized by total number so can compare within R, across layers
     
@@ -196,7 +201,7 @@ function gen_immuno_paper_figs()
     
     % Do pval D1R 
     [tmp pval_d1_l2vl4] = ttest2( norm_d1_dens( :,2 ), norm_d1_dens( :,3 ) );
-    [tmp pval_d1_l2vl5] = ttest2( norm_d1_dens( :,2 ), [norm_d1_dens( :,4 ) );
+    [tmp pval_d1_l2vl5] = ttest2( norm_d1_dens( :,2 ), norm_d1_dens( :,4 ) );
     [tmp pval_d1_l2vl6] = ttest2( norm_d1_dens( :,2 ), norm_d1_dens( :,5 ) );
     
     % pval D2Rs
