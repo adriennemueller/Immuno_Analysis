@@ -68,7 +68,7 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
     
     
     figure();
-    set(gcf, 'Position', [100, 100, 650, 1000])
+    set(gcf, 'Position', [100, 100, 800, 700])
     
     D1R_NRG_Props = Counts_Struct(2).D1R_CT_count ./ Counts_Struct(2).D1R_CT_Total_count;
     D2R_NRG_Props = Counts_Struct(2).D2R_CT_count ./ Counts_Struct(2).D2R_CT_Total_count;
@@ -84,42 +84,54 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct )
     %D1R_layer_p_val = general_chi_sq_test(D1R_comp_mat);
    
     % Place Lines above Plot
-    curr_fig = add_sig_lines( gcf, D1R_NRG_Props, D2R_NRG_Props, NRG_pvals, D1R_ctx_pvals, D2R_ctx_pvals );
+    % Add D1R/D2R Comp lines
+    bwidth = get(b, 'BarWidth');
+    vertspace = 0.03;
+    
+    for i = 2:5
+        leftx  = i - bwidth{1}/4;
+        rightx = i + bwidth{1}/4;
+        line( [leftx rightx], [ D1R_NRG_Props(i) D1R_NRG_Props(i) ] + vertspace, 'LineWidth', 3, 'Color', 'black' );
+    end
+    pval_strings = get_pval_string(NRG_pvals, 5);
+    text( 1:5, D1R_NRG_Props + 2*vertspace, pval_strings, 'FontWeight', 'bold', 'FontSize', 11, 'HorizontalAlignment', 'Center');
+  
+    %%% Add Green D1R Lines
+    d1_leftx = 2 - bwidth{1}/4;
+    d2_leftx = 2 + bwidth{1}/4;
+    top_of_bar = max( D1R_NRG_Props );
+    for i = 3:5
+        d1_rightx = i - bwidth{1}/4;
+        line( [d1_leftx d1_rightx], [ top_of_bar top_of_bar ] + i * vertspace, ...
+              'LineWidth', 3, 'Color', green_col );
+        d1r_pval_string = get_pval_string( D1R_ctx_pvals(i), 3);
+        text( ((d1_leftx + d1_rightx) / 2), (top_of_bar + i * vertspace + vertspace/2.5), d1r_pval_string, 'FontWeight', 'bold', 'FontSize', 11, 'HorizontalAlignment', 'Center', 'Color', green_col);
+          
+          
+        d2_rightx = i + bwidth{1}/4;
+        line( [d2_leftx d2_rightx], [ top_of_bar top_of_bar ] + (i+3) * vertspace, ...
+              'LineWidth', 3, 'Color', 'blue' );
+        d2r_pval_string = get_pval_string( D2R_ctx_pvals(i), 3);
+        text( ((d2_leftx + d2_rightx) / 2), (top_of_bar + (i+3) * vertspace + vertspace/2.5), d2r_pval_string, 'FontWeight', 'bold', 'FontSize', 11, 'HorizontalAlignment', 'Center', 'Color', 'blue');
+        
+    end     
+        
     
     % Other Plot Prettiness
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    ylabel( 'Proportion of NRG+ Neurons Expressing Receptor)', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( 'Proportion of NRG+ Neurons Expressing Receptor', 'FontSize', 16, 'FontWeight', 'bold' );
     set(gca,'FontSize',14, 'FontWeight', 'bold');
-    legend( 'D1R', 'D2R');
+    legend( 'D1R', 'D2R', 'Location', 'northwest');
+    ylim([ 0 1.3]);
     
-% %    ax = subplot(4,2, [7,8]);
-% %    set( ax, 'Units', 'pixels' );
-%     
-% %    hsp1 = get(ax, 'OuterPosition')
-% %    hsp1(4) = 5;
-% %    set( ax, 'OuterPosition', hsp1 );
-%     
-% %     set(gca, 'visible', 'off')
-% %     get( ax, 'PlotBoxAspectRatio' )
-% %     set( ax, 'PlotBoxAspectRatio', [1 1 0.1] );
-% %     xlabel( 'Proportion of Neurons Expressing D5R' );
-% %     set(findall(gca, 'type', 'text'), 'visible', 'on')
-%      
-%     %tightfig( gcf );
-% 
-%     % Fix so saving as pdf will be the right side.
-%     resize_paper_for_pdf( gcf );
-%     save_out_fig( gcf, 'Fig3_D5R_By_CellType_and_Layer' );
+
+    tightfig( gcf );
+
+    % Fix so saving as pdf will be the right size.
+    resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, 'Fig1_D1R_D2R_NRG_Proportions_By_Layer' );
 
 end
-
-function fig = add_sig_lines( fig, D1R_NRG_Props, D2R_NRG_Props, NRG_pvals, D1R_ctx_pvals, D2R_ctx_pvals
-    
-    pval_strings = get_pval_string(NRG_pvals, 0.05/5);
-    text( 1:5, D1R_NRG_Props + 3, pval_strings, 'FontWeight', 'bold', 'FontSize', 11); 
-    
-end
-
 
 function rslt = calc_NRG_pvals( Counts_Struct )
 

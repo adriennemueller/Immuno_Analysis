@@ -1,6 +1,6 @@
 function save_out_fig( fig_h, fig_label )
 
-    direc = '/Volumes/Olaf/Papers/D5R Frontiers/Figures';
+    direc = '/Volumes/Hnoss/Papers/Tracer Paper/Tracer Paper Figures/';
 
     ext_list = {'fig', 'eps', 'pdf'};
     
