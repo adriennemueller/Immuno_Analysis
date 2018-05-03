@@ -22,19 +22,18 @@ function gen_tracer_barplot()
     
         
     figure();
+    green_col = [0 0.8 0];
     set(gcf, 'Position', [500, 500, 550, 500])
-    b = bar([D1R_Frac*100, D2R_Frac*100], 'k' );
+    bar(1, D1R_Frac*100, 'FaceColor', green_col );
+    hold on;
+    bar(2, D2R_Frac*100, 'b' );
     sigstar({[1,2]}, pval);
     
-%     green_col = [0 0.8 0];
-%     %b(1).FaceColor = green_col; b(2).FaceColor = 'b';
-%     set(b(1), 'facecolor', green_col ); 
-%     set(b(2), 'facecolor', 'b' ); 
-%     
+     
     
     TickLabel_FontSize = 14; AxisLabel_FontSize = 16;
         
-    set( gca, 'YTick', [0 25 50 75 90 100], 'XTickLabel', {'D1R', 'D2R'}, 'FontSize', TickLabel_FontSize,  ...
+    set( gca, 'YTick', [0 25 50 75 90 100], 'XTick', [1, 2], 'XTickLabel', {'D1R', 'D2R'}, 'FontSize', TickLabel_FontSize,  ...
             'FontWeight', 'Bold' ); xlim([0.2 2.8]); ylim( [0 100] ); box( gca, 'off');
     ylabel( {'Expression on Retrogradely-Labeled FEF Neurons (%)'}, 'FontSize', AxisLabel_FontSize, 'FontWeight', 'bold' );
             

@@ -261,22 +261,22 @@ function gen_immuno_paper_figs()
     NeuN_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'NeuN', 'FEF', 'TC' );
     NeuN_by_Layer = NeuN_by_Layer_struct.mean;
 
-    D1R_by_Layer = D1R_by_Layer ./ NeuN_by_Layer;
-    D2R_by_Layer = D2R_by_Layer ./ NeuN_by_Layer;
+    %D1R_by_Layer = D1R_by_Layer ./ NeuN_by_Layer;
+    %D2R_by_Layer = D2R_by_Layer ./ NeuN_by_Layer;
     
     
     mm_factor = 1000000;
-
+    
     figure();
     green_col = [0 0.8 0];
     b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
     %ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    ylabel( 'Density of Neurons Expressing Receptor (/mm^{2})', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( 'Neurons Expressing Receptor / mm^{2}', 'FontSize', 16, 'FontWeight', 'bold' );
     %set(gca,'XTickLabelRotation',45);
     set(gca,'FontSize',14, 'FontWeight', 'bold');
-    legend( 'D1R', 'D2R');
-    title( 'Cell Density by Layer / Normalized by NeuN ' );
+    legend( 'D1R', 'D2R', 'Location', 'northwest');
+    %title( 'Cell Density by Layer' );
     
     %% FIG1 FOR D5R PAPER
     
