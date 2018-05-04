@@ -265,17 +265,57 @@ function gen_immuno_paper_figs()
     %D2R_by_Layer = D2R_by_Layer ./ NeuN_by_Layer;
     
     
+    NRG_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Neurogranin', 'FEF', 'TC' );
+    NRG_by_Layer = NRG_by_Layer_struct.mean;
+    SMI32_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'SMI-32', 'FEF', 'TC' );
+    SMI32_by_Layer = SMI32_by_Layer_struct.mean;
+    Parv_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Parvalbumin', 'FEF', 'TC' );
+    Parv_by_Layer = Parv_by_Layer_struct.mean;
+    Calb_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Calbindin', 'FEF', 'TC' );
+    Calb_by_Layer = Calb_by_Layer_struct.mean;
+    Calr_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Calretinin', 'FEF', 'TC' );
+    Calr_by_Layer = Calr_by_Layer_struct.mean;
+    Som_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Somatostatin', 'FEF', 'TC' );
+    Som_by_Layer = Som_by_Layer_struct.mean;
+
+    
     mm_factor = 1000000;
     
     figure();
-    green_col = [0 0.8 0];
-    b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
-    %ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
+    subplot(1,2,1);
+    hold on;
+    gray_col = [0.8 0.8 0.8];
+    b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
+    
+    ylim( [0 370] ); set(gca, 'ytick', [0:50:300]);
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
-    ylabel( 'Neurons Expressing Receptor / mm^{2}', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( 'Neurons / mm^{2}', 'FontSize', 12, 'FontWeight', 'bold' );
+    xlabel( 'Layer' );
     %set(gca,'XTickLabelRotation',45);
-    set(gca,'FontSize',14, 'FontWeight', 'bold');
+    set(gca,'FontSize',10, 'FontWeight', 'bold');
     legend( 'D1R', 'D2R', 'Location', 'northwest');
+    hold off;
+    
+    subplot(1,2,2);
+    hold on;
+    bar( [NRG_by_Layer'; SMI32_by_Layer'; Parv_by_Layer'; Calr_by_Layer'; Calb_by_Layer'; Som_by_Layer']' .* mm_factor, 'BarWidth', 1);
+    ylim( [0 370] ); set(gca, 'ytick', [0:50:300]);
+    set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
+    ylabel( 'Neurons / mm^{2}', 'FontSize', 12, 'FontWeight', 'bold' );
+    xlabel( 'Layer' );
+    %set(gca,'XTickLabelRotation',45);
+    set(gca,'FontSize',10, 'FontWeight', 'bold');
+    legend( 'Neurogranin', 'SMI-32','Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin', 'Location', 'northwest');
+            
+    
+    set(gcf, 'Units', 'centimeters' );
+    set(gcf, 'Position', [30, 30, 18, 7.2])
+    set(gca, 'box', 'off' );
+    tightfig( gcf );
+    resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, strcat('Fig7_D1R_D2R_Densities_By_Layer') );
+    hold off;
+
     %title( 'Cell Density by Layer' );
     
     %% FIG1 FOR D5R PAPER

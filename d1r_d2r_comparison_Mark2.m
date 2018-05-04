@@ -22,20 +22,21 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     rslt.D2R_Som   = avg_X_animals( immuno_struct, 'D2R', 'Somatostatin', 'FEF' );
     rslt.D2R_Inhib = avg_X_animals( immuno_struct, 'D2R', 'Inhibitory', 'FEF' );
     
-    D1R_Excit = [rslt.D1R_SMI32 rslt.D1R_NRG];
-    D2R_Excit = [rslt.D2R_SMI32 rslt.D2R_NRG];
+    D1R_Excit = [rslt.D1R_NRG rslt.D1R_SMI32];
+    D2R_Excit = [rslt.D2R_NRG rslt.D2R_SMI32];
     D1R_Inhib = [rslt.D1R_Inhib 0 rslt.D1R_Parv rslt.D1R_Calb rslt.D1R_Calr rslt.D1R_Som ];
     D2R_Inhib = [rslt.D2R_Inhib 0 rslt.D2R_Parv rslt.D2R_Calb rslt.D2R_Calr rslt.D2R_Som ];
     
     % Plot
-    figure(); green_col = [0 0.8 0];
+    figure(); gray_col = [0.8 0.8 0.8];
     y = [D1R_Excit; D2R_Excit]';
-    b = bar( y ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    b = bar( y ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
     ylim( [0 120] ); set(gca, 'ytick', [0:20:100]);
-    set(gca,'XTickLabel',{'SMI-32','Neurogranin'});
-    ylabel( '% of Neurons with Receptor Type', 'FontSize', 16, 'FontWeight', 'bold' );
-    set(gca,'FontSize',14, 'FontWeight', 'bold');
-    legend( 'D1R', 'D2R');
+    %set(gca,'XTickLabel',{'SMI-32','Neurogranin'});
+    set(gca,'XTickLabel',{'Neurogranin','SMI-32'});
+    ylabel( {'% of Neurons with'; 'Receptor Type'}, 'FontSize', 12, 'FontWeight', 'bold' );
+    set(gca,'FontSize',10, 'FontWeight', 'bold');
+    %legend( 'D1R', 'D2R');
     
     % P-Values and Significance Plots 
     %ctr2 = bsxfun(@plus, b(2).XData, [b(2).XOffset]');
@@ -51,15 +52,21 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     xpos2 = [b(1).XData(2) + b(1).XOffset, b(1).XData(2) + b(2).XOffset];
     sigstar( {xpos1, xpos2}, [D1R_SMI32_pval, D1R_NRG_pval]);    
     
+    set(gcf, 'Units', 'centimeters' );
+    set(gcf, 'Position', [30, 30, 8.6, 7.2])
+    set(gca, 'box', 'off' );
+    tightfig( gcf );
+    resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, strcat('Fig2_D1R_D2R_Excitatory_Proportions') );
     
     figure();
-    b = bar( [D1R_Inhib; D2R_Inhib]' ); b(1).FaceColor = green_col; b(2).FaceColor = 'b';
+    b = bar( [D1R_Inhib; D2R_Inhib]' ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
     ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'All Inhibitory', ' ', 'Parvalbumin','Calbindin', 'Calretinin', 'Somatostatin'});
-    ylabel( '% of Neurons with Receptor Type', 'FontSize', 16, 'FontWeight', 'bold' );
+    ylabel( {'% of Neurons with'; 'Receptor Type'}, 'FontSize', 12, 'FontWeight', 'bold' );
     set(gca,'XTickLabelRotation',45);
-    set(gca,'FontSize',14, 'FontWeight', 'bold');
-    legend( 'D1R', 'D2R');
+    set(gca,'FontSize',10, 'FontWeight', 'bold');
+    %legend( 'D1R', 'D2R');
 
     % Get P- values
     celltype_list = {'Inhibitory', 'Parvalbumin','Calbindin', 'Calretinin'};
@@ -75,6 +82,13 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     xpos3 = [b(1).XData(3) + b(1).XOffset, b(1).XData(3) + b(2).XOffset];
     xpos4 = [b(1).XData(4) + b(1).XOffset, b(1).XData(4) + b(2).XOffset];
     xpos5 = [b(1).XData(5) + b(1).XOffset, b(1).XData(5) + b(2).XOffset];
-    sigstar( {xpos1, xpos3, xpos4, xpos5}, pval_list);    
+    sigstar( {xpos1, xpos3, xpos4, xpos5}, pval_list);
+    
+    set(gcf, 'Units', 'centimeters' );
+    set(gcf, 'Position', [30, 30, 8.6, 7.2])
+    set(gca, 'box', 'off' );
+    tightfig( gcf );
+    resize_paper_for_pdf( gcf );
+    save_out_fig( gcf, strcat('Fig5_D1R_D2R_Inhibitory_Proportions') );
 
 end
