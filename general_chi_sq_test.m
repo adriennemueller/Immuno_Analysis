@@ -17,24 +17,29 @@ function p = general_chi_sq_test( data_mat )
         data_mat = sum( data_mat, 3);
     end
     
-    % Row Marginal
-    rm = sum(data_mat,2);
-    
-    % Column Marginal
-    cm = sum(data_mat,1);
-    
-    total = sum(data_mat(:));
-    
-    expecteds = (rm * cm) ./ total; % Same dimensions as observed.
+    % Perform Fisher's Exact Test if a frequency of 0 present in data_mat
+%     if find(data_mat == 0 )
+%         [h, p, stats] = fishertest(data_mat');
+%     else
 
-    ObsExpTmp = (abs( data_mat - expecteds )) .^ 2;
-    ObsExpFinal = ObsExpTmp ./ expecteds;
-    
-    chsq_val = sum(ObsExpFinal(:));
-    
-    [m, n] = size(data_mat);
-    df = (m - 1) * (n - 1);
-    
-    p = 1 - chi2cdf(chsq_val, df);
+        % Row Marginal
+        rm = sum(data_mat,2);
 
+        % Column Marginal
+        cm = sum(data_mat,1);
+
+        total = sum(data_mat(:));
+
+        expecteds = (rm * cm) ./ total; % Same dimensions as observed.
+
+        ObsExpTmp = (abs( data_mat - expecteds )) .^ 2;
+        ObsExpFinal = ObsExpTmp ./ expecteds;
+
+        chsq_val = sum(ObsExpFinal(:));
+
+        [m, n] = size(data_mat);
+        df = (m - 1) * (n - 1);
+
+        p = 1 - chi2cdf(chsq_val, df);
+%     end
 end
