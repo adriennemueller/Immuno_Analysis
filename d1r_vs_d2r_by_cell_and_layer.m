@@ -85,6 +85,12 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
     D2R_CT_Props = Counts_Struct(celltype_idx).D2R_CT_count ./ Counts_Struct(celltype_idx).D2R_CT_Total_count;
     %SMI32_Props = Counts_Struct(3).D5R_CT_count ./ Counts_Struct(3).CT_Total_count;
 
+    % Set proportion to 0 if total count less than 2.
+    D1R_low_count_idxs = find (Counts_Struct(celltype_idx).D1R_CT_Total_count <= 2);
+    D1R_CT_Props(D1R_low_count_idxs) = 0;
+    D2R_low_count_idxs = find (Counts_Struct(celltype_idx).D2R_CT_Total_count <= 2);
+    D2R_CT_Props(D2R_low_count_idxs) = 0;
+            
     gray_col = [0.8 0.8 0.8];
     if strcmp( sel_celltype, 'Neurogranin' )
         left_color = [0 0 0];
@@ -118,7 +124,7 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
     vertspace = 0.03;
     higher_props = max( [D1R_CT_Props; D2R_CT_Props] );
     
-    yyaxis left;
+    if strcmp( sel_celltype, 'Neurogranin' ),  yyaxis left; end
 
     for i = 2:5
         leftx  = i - bwidth{1}/4;
@@ -149,7 +155,7 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
 %     end     
     
 
-    yyaxis left;
+    if strcmp( sel_celltype, 'Neurogranin' ),  yyaxis left; end
     % Other Plot Prettiness
     set(gcf, 'Units', 'centimeters' );
     set(gcf, 'Position', [30, 30, 8.6, 7.2])
