@@ -38,6 +38,7 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     set(gca,'FontSize',10, 'FontWeight', 'bold');
     %legend( 'D1R', 'D2R');
     
+    
     % P-Values and Significance Plots 
     %ctr2 = bsxfun(@plus, b(2).XData, [b(2).XOffset]');
     D1R_SMI32_cell_mat = gen_CMH_cell_mat( immuno_struct, 'D1RD2R', 'SMI-32' );
@@ -52,6 +53,7 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     xpos2 = [b(1).XData(2) + b(1).XOffset, b(1).XData(2) + b(2).XOffset];
     sigstar( {xpos1, xpos2}, [D1R_SMI32_pval, D1R_NRG_pval]);    
     
+    legend( b, 'D1R', 'D2R', 'Location', 'northwest');
     set(gcf, 'Units', 'centimeters' );
     set(gcf, 'Position', [30, 30, 8.6, 7.2])
     set(gca, 'box', 'off' );
@@ -66,8 +68,7 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     ylabel( {'% of Neurons with'; 'Receptor Type'}, 'FontSize', 12, 'FontWeight', 'bold' );
     set(gca,'XTickLabelRotation',45);
     set(gca,'FontSize',10, 'FontWeight', 'bold');
-    %legend( 'D1R', 'D2R');
-
+    
     % Get P- values
     celltype_list = {'Inhibitory', 'Parvalbumin','Calbindin', 'Calretinin'};
     pval_list = [];
@@ -84,6 +85,7 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     xpos5 = [b(1).XData(5) + b(1).XOffset, b(1).XData(5) + b(2).XOffset];
     sigstar( {xpos1, xpos3, xpos4, xpos5}, pval_list);
     
+    legend( b, 'D1R', 'D2R', 'Location', 'northwest');
     set(gcf, 'Units', 'centimeters' );
     set(gcf, 'Position', [30, 30, 8.6, 7.2])
     set(gca, 'box', 'off' );

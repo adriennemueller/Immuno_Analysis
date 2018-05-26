@@ -282,7 +282,7 @@ function gen_immuno_paper_figs()
     mm_factor = 1000000;
     
     figure();
-    subplot(1,2,1);
+    subplot(1,2,2);
     hold on;
     gray_col = [0.8 0.8 0.8];
     b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
@@ -296,7 +296,7 @@ function gen_immuno_paper_figs()
     legend( 'D1R', 'D2R', 'Location', 'northwest');
     hold off;
     
-    subplot(1,2,2);
+    subplot(1,2,1);
     hold on;
     bar( [NRG_by_Layer'; SMI32_by_Layer'; Parv_by_Layer'; Calr_by_Layer'; Calb_by_Layer'; Som_by_Layer']' .* mm_factor, 'BarWidth', 1);
     ylim( [0 370] ); set(gca, 'ytick', [0:50:300]);

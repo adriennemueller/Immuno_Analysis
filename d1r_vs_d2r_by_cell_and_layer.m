@@ -104,7 +104,7 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
         hold on
         yyaxis right;
         plot(1:5, d1r_d2r_ratio, 'LineWidth', 2);
-        set(gca, 'YLim', [0 2.75]); yticks( 0:0.5:2);
+        set(gca, 'YLim', [1 2.75]); yticks( 1:0.5:2);
         ylabel( {'Ratio of D1R+ / D2R+ Neurons'} );
         hold off
     else
