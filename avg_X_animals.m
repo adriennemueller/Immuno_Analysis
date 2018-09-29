@@ -30,5 +30,6 @@ function rslt = avg_X_animals( immuno_struct, receptor, celltype, region )
     end
     
     % Average across animals
-    rslt = mean(avg_list) * 100;
+    rslt.mean = mean(avg_list) * 100;
+    rslt.ste  = (std(avg_list) / sqrt( length(avg_list) )) * 100;
 end

@@ -22,15 +22,22 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     rslt.D2R_Som   = avg_X_animals( immuno_struct, 'D2R', 'Somatostatin', 'FEF' );
     rslt.D2R_Inhib = avg_X_animals( immuno_struct, 'D2R', 'Inhibitory', 'FEF' );
     
-    D1R_Excit = [rslt.D1R_NRG rslt.D1R_SMI32];
-    D2R_Excit = [rslt.D2R_NRG rslt.D2R_SMI32];
-    D1R_Inhib = [rslt.D1R_Inhib 0 rslt.D1R_Parv rslt.D1R_Calb rslt.D1R_Calr rslt.D1R_Som ];
-    D2R_Inhib = [rslt.D2R_Inhib 0 rslt.D2R_Parv rslt.D2R_Calb rslt.D2R_Calr rslt.D2R_Som ];
+    D1R_Excit = [rslt.D1R_NRG.mean rslt.D1R_SMI32.mean];
+    D1R_Excit_ste = [rslt.D1R_NRG.ste rslt.D1R_SMI32.ste];
+    D2R_Excit = [rslt.D2R_NRG.mean rslt.D2R_SMI32.mean];
+    D2R_Excit_ste = [rslt.D2R_NRG.ste rslt.D2R_SMI32.ste];
+    
+    D1R_Inhib = [rslt.D1R_Inhib.mean 0 rslt.D1R_Parv.mean rslt.D1R_Calb.mean rslt.D1R_Calr.mean rslt.D1R_Som.mean ];
+    D1R_Inhib_ste = [rslt.D1R_Inhib.ste 0 rslt.D1R_Parv.ste rslt.D1R_Calb.ste rslt.D1R_Calr.ste rslt.D1R_Som.ste ];
+    
+    D2R_Inhib = [rslt.D2R_Inhib.mean 0 rslt.D2R_Parv.mean rslt.D2R_Calb.mean rslt.D2R_Calr.mean rslt.D2R_Som.mean ];
+    D2R_Inhib_ste = [rslt.D2R_Inhib.ste 0 rslt.D2R_Parv.ste rslt.D2R_Calb.ste rslt.D2R_Calr.ste rslt.D2R_Som.ste ];
     
     % Plot
     figure(); gray_col = [0.8 0.8 0.8];
     y = [D1R_Excit; D2R_Excit]';
     b = bar( y ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
+
     ylim( [0 120] ); set(gca, 'ytick', [0:20:100]);
     %set(gca,'XTickLabel',{'SMI-32','Neurogranin'});
     set(gca,'XTickLabel',{'Neurogranin','SMI-32'});
@@ -49,6 +56,13 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
     %D1R_NRG_pval = cochran_mantel_haenszel_test( D1R_NRG_cell_mat, 1 );
     D1R_NRG_pval  = general_chi_sq_test( D1R_NRG_cell_mat );
     
+    hold on;
+    err_x1 = b(1).XData + b(1).XOffset;
+    err_x2 = b(2).XData + b(2).XOffset;
+    errorbar( err_x1, D1R_Excit, D1R_Excit_ste, 'k', 'linestyle', 'none' );
+    errorbar( err_x2, D2R_Excit, D2R_Excit_ste, 'k', 'linestyle', 'none' );
+    hold off;
+
     xpos1 = [b(1).XData(1) + b(1).XOffset, b(1).XData(1) + b(2).XOffset];
     xpos2 = [b(1).XData(2) + b(1).XOffset, b(1).XData(2) + b(2).XOffset];
     sigstar( {xpos1, xpos2}, [D1R_SMI32_pval, D1R_NRG_pval]);    
@@ -77,6 +91,15 @@ function rslt = d1r_d2r_comparison_Mark2( immuno_struct )
         %pval_list(i) = cochran_mantel_haenszel_test( cell_mat, 1 );
         pval_list(i) = general_chi_sq_test( cell_mat );
     end
+    
+    
+    hold on;
+    err_x1 = b(1).XData + b(1).XOffset;
+    err_x2 = b(2).XData + b(2).XOffset;
+    errorbar( err_x1, D1R_Inhib, D1R_Inhib_ste, 'k', 'linestyle', 'none' );
+    errorbar( err_x2, D2R_Inhib, D2R_Inhib_ste, 'k', 'linestyle', 'none' );
+    hold off;
+    
     
     %Figure out how to do cellfun for this
     xpos1 = [b(1).XData(1) + b(1).XOffset, b(1).XData(1) + b(2).XOffset];
