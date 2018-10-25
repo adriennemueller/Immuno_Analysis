@@ -10,20 +10,21 @@ function rslt = get_count( substruct, type )
     for i = 1:length(substruct)
         if ~ isempty( substruct(i).CountsByLayer )
             if strcmp(type, 'R')
-                rslt = rslt + substruct(i).CountsByLayer(1,:);
+                tmp = substruct(i).CountsByLayer(1,:);
             elseif strcmp( type, 'C')
-                rslt = rslt + substruct(i).CountsByLayer(2,:);
+                tmp = substruct(i).CountsByLayer(2,:);
             elseif strcmp( type, 'B')
-                rslt = rslt + substruct(i).CountsByLayer(3,:);
+                tmp = substruct(i).CountsByLayer(3,:);
             elseif strcmp( type, 'T')
                 tmp = substruct(i).CountsByLayer(3,:) + substruct(i).CountsByLayer(2,:);
-                rslt = rslt + tmp;
             elseif strcmp( type, 'TR' )
                 tmp = substruct(i).CountsByLayer(3,:) + substruct(i).CountsByLayer(1,:);
-                rslt = rslt + tmp;
             else
                 disp( 'Unrecognized type.' );
             end
+            
+            rslt = rslt + tmp;
         end
+        
     end
 end

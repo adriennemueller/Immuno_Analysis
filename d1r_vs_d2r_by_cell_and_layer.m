@@ -20,6 +20,10 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
         
         Counts_Struct(i).D1R_CT_TotalXLayers = sum( Counts_Struct(i).D1R_CT_count );
         Counts_Struct(i).D1R_CT_Total_TotalXLayers = sum( Counts_Struct(i).D1R_CT_Total_count ); 
+        
+        Counts_Struct(i).D1R_CT_mean_ste      = get_bylayer_mean_ste( D1R_substruct, 'B', 'T' );
+        Counts_Struct(i).D1R_CT_Only_mean_ste = get_bylayer_mean_ste( D1R_substruct, 'C', 'T' );
+        
 
         D2R_substruct = immuno_struct(strcmp({immuno_struct.Stain1}, 'D2R') & strcmp({immuno_struct.Stain2}, celltype) & strcmp({immuno_struct.Region}, 'FEF'));
         Counts_Struct(i).D2R_CT_count   = get_count( D2R_substruct, 'B' );
@@ -29,6 +33,8 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
         Counts_Struct(i).D2R_CT_TotalXLayers = sum( Counts_Struct(i).D2R_CT_count );
         Counts_Struct(i).D2R_CT_Total_TotalXLayers = sum( Counts_Struct(i).D2R_CT_Total_count ); 
 
+        Counts_Struct(i).D2R_CT_mean_ste      = get_bylayer_mean_ste( D2R_substruct, 'B', 'T' );
+        Counts_Struct(i).D2R_CT_Only_mean_ste = get_bylayer_mean_ste( D2R_substruct, 'C', 'T' );
         
     end
     
@@ -90,7 +96,26 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
     D1R_CT_Props(D1R_low_count_idxs) = 0;
     D2R_low_count_idxs = find (Counts_Struct(celltype_idx).D2R_CT_Total_count <= 2);
     D2R_CT_Props(D2R_low_count_idxs) = 0;
-            
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% Trying out %%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    % Set this to 0, if want to pool across animals instead of averaging for
+    % each.
+    as_animal_avg = 1;
+    if as_animal_avg
+    
+        D1R_CT_Props     = Counts_Struct(celltype_idx).D1R_CT_mean_ste.bylayer_avg;
+        D1R_CT_Props_STE = Counts_Struct(celltype_idx).D1R_CT_mean_ste.bylayer_ste;
+    
+        D2R_CT_Props     = Counts_Struct(celltype_idx).D2R_CT_mean_ste.bylayer_avg;
+        D2R_CT_Props_STE = Counts_Struct(celltype_idx).D2R_CT_mean_ste.bylayer_ste;
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     gray_col = [0.8 0.8 0.8];
     if strcmp( sel_celltype, 'Neurogranin' )
         left_color = [0 0 0];
@@ -107,10 +132,30 @@ function rslt = d1r_vs_d2r_by_cell_and_layer( immuno_struct, sel_celltype )
         set(gca, 'YLim', [1 2.75]); yticks( 1:0.5:2);
         ylabel( {'Ratio of D1R+ / D2R+ Neurons'} );
         hold off
+        
+        yyaxis left;
     else
         b = bar( [D1R_CT_Props' D2R_CT_Props'] ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
     end
     
+    
+    % Add errorbars if as_animal_avg is set;
+    if as_animal_avg
+        hold on;
+        err_x1 = b(1).XData + b(1).XOffset;
+        err_x2 = b(2).XData + b(2).XOffset;
+        errorbar( err_x1, D1R_CT_Props, D1R_CT_Props_STE, 'k', 'linestyle', 'none' );
+        errorbar( err_x2, D2R_CT_Props, D2R_CT_Props_STE, 'k', 'linestyle', 'none' );
+        hold off;
+        
+        assignin( 'base', 'D1R_Means', D1R_CT_Props );
+        assignin( 'base', 'D1R_STEs',  D1R_CT_Props_STE );
+        assignin( 'base', 'D2R_Means', D2R_CT_Props );
+        assignin( 'base', 'D2R_STEs',  D2R_CT_Props_STE );
+        
+    end
+    
+        
     
     %%% DR/NRG - Across cortical layers:
     %D1R_l2_D1R = Counts_Struct(2).D1R_CT_count(2:5)';

@@ -1,4 +1,3 @@
-function gen_immuno_paper_figs()
 
     immuno_struct = make_cellpos_struct();
     immuno_struct = gen_celldensities( immuno_struct );
@@ -253,13 +252,16 @@ function gen_immuno_paper_figs()
     
     D1R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D1R', 'all', 'FEF', 'TR' );
     D1R_by_Layer = D1R_by_Layer_struct.mean;
+    D1R_by_Layer_STE = D1R_by_Layer_struct.ste;
 
     D2R_by_Layer_struct = celldensity_by_layer( immuno_struct, 'D2R', 'all', 'FEF', 'TR' );
     D2R_by_Layer = D2R_by_Layer_struct.mean;
+    D2R_by_Layer_STE = D2R_by_Layer_struct.ste;
 
     % Norm by NeuN
     NeuN_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'NeuN', 'FEF', 'TC' );
     NeuN_by_Layer = NeuN_by_Layer_struct.mean;
+    NeuN_by_Layer_STE = NeuN_by_Layer_struct.ste;
 
     %D1R_by_Layer = D1R_by_Layer ./ NeuN_by_Layer;
     %D2R_by_Layer = D2R_by_Layer ./ NeuN_by_Layer;
@@ -267,17 +269,22 @@ function gen_immuno_paper_figs()
     
     NRG_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Neurogranin', 'FEF', 'TC' );
     NRG_by_Layer = NRG_by_Layer_struct.mean;
+    NRG_by_Layer_STE = NRG_by_Layer_struct.ste;
     SMI32_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'SMI-32', 'FEF', 'TC' );
     SMI32_by_Layer = SMI32_by_Layer_struct.mean;
+    SMI32_by_Layer_STE = SMI32_by_Layer_struct.ste;
     Parv_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Parvalbumin', 'FEF', 'TC' );
     Parv_by_Layer = Parv_by_Layer_struct.mean;
+    Parv_by_Layer_STE = Parv_by_Layer_struct.ste;
     Calb_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Calbindin', 'FEF', 'TC' );
     Calb_by_Layer = Calb_by_Layer_struct.mean;
+    Calb_by_Layer_STE = Calb_by_Layer_struct.ste;
     Calr_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Calretinin', 'FEF', 'TC' );
     Calr_by_Layer = Calr_by_Layer_struct.mean;
+    Calr_by_Layer_STE = Calr_by_Layer_struct.ste;
     Som_by_Layer_struct = celldensity_by_layer( immuno_struct, 'all', 'Somatostatin', 'FEF', 'TC' );
     Som_by_Layer = Som_by_Layer_struct.mean;
-
+    Som_by_Layer_STE = Som_by_Layer_struct.ste;
     
     mm_factor = 1000000;
     
@@ -285,7 +292,12 @@ function gen_immuno_paper_figs()
     subplot(1,2,2);
     hold on;
     gray_col = [0.8 0.8 0.8];
-    b = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); b(1).FaceColor = 'k'; b(2).FaceColor = gray_col;
+    a = bar( [D1R_by_Layer'; D2R_by_Layer']' .* mm_factor ); a(1).FaceColor = 'k'; a(2).FaceColor = gray_col;
+    
+    err_x1 = a(1).XData + a(1).XOffset;
+    err_x2 = a(2).XData + a(2).XOffset;
+    errorbar( err_x1, D1R_by_Layer .* mm_factor, D1R_by_Layer_STE .* mm_factor, 'k', 'linestyle', 'none', 'HandleVisibility','off' );
+    errorbar( err_x2, D2R_by_Layer .* mm_factor, D2R_by_Layer_STE .* mm_factor, 'k', 'linestyle', 'none', 'HandleVisibility','off' );
     
     ylim( [0 370] ); set(gca, 'ytick', [0:50:300]);
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
@@ -297,8 +309,12 @@ function gen_immuno_paper_figs()
     hold off;
     
     subplot(1,2,1);
+    
+    CT_by_Layer_Means = [NRG_by_Layer'; SMI32_by_Layer'; Parv_by_Layer'; Calr_by_Layer'; Calb_by_Layer'; Som_by_Layer']';
+    CT_by_Layer_STEs = [NRG_by_Layer_STE'; SMI32_by_Layer_STE'; Parv_by_Layer_STE'; Calr_by_Layer_STE'; Calb_by_Layer_STE'; Som_by_Layer_STE']';
+    
     hold on;
-    bar( [NRG_by_Layer'; SMI32_by_Layer'; Parv_by_Layer'; Calr_by_Layer'; Calb_by_Layer'; Som_by_Layer']' .* mm_factor, 'BarWidth', 1);
+    b = bar( CT_by_Layer_Means .* mm_factor, 'BarWidth', 1);
     ylim( [0 370] ); set(gca, 'ytick', [0:50:300]);
     set(gca,'XTickLabel',{'I', 'II-III' 'IV' 'V' 'VI'});
     ylabel( 'Neurons / mm^{2}', 'FontSize', 12, 'FontWeight', 'bold' );
@@ -306,7 +322,13 @@ function gen_immuno_paper_figs()
     %set(gca,'XTickLabelRotation',45);
     set(gca,'FontSize',10, 'FontWeight', 'bold');
     legend( 'Neurogranin', 'SMI-32','Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin', 'Location', 'northwest');
-            
+
+    for i  = 1:length( b )
+        err_x = b(i).XData + b(i).XOffset;
+        err_y = CT_by_Layer_Means(:,i);
+        errorbar( err_x, err_y .* mm_factor, CT_by_Layer_STEs(:,i) .* mm_factor, 'k', 'linestyle', 'none', 'HandleVisibility','off' );
+    end
+    
     
     set(gcf, 'Units', 'centimeters' );
     set(gcf, 'Position', [30, 30, 18, 7.2])
@@ -391,5 +413,3 @@ function gen_immuno_paper_figs()
     
     immuno_struct = add_combinedInhibs( immuno_struct );
     d1r_d2r_comparison_Mark2 ( immuno_struct );
-    
-end
