@@ -95,7 +95,7 @@ end
 % parse_fnames loops through a fname and extracts the animal name, region,
 % receptor and cell type from the filename
 function rslt = parse_fnames( rslt, idx, fname )
-    animal_list = {'Marilyn', 'Bogota', 'Santiago', 'Benny'};
+    animal_list =  {'Marilyn', 'Bogota', 'Santiago', 'Benny', 'Azzy'};
     region_list = {'FEF', 'dlPFC'};
     receptor_list = {'D1R', 'D2R', 'D5R'};
     celltype_list = {'NeuN', 'Calbindin', 'Calretinin', 'Parvalbumin', 'Somatostatin', 'SMI-32', 'Neurogranin'};     
@@ -158,7 +158,6 @@ end
 % Tif file is assumed to be oriented vertically with superfical cortx at
 % the top and deep cortex at the bottom
 function rslt = get_img_dimensions( fullfname )
-
     rslt = NaN(2,'double');
     fullfname = fullfname{1};
     [folder,fname,ext] = fileparts( fullfname );
