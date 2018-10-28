@@ -95,10 +95,10 @@ end
 % parse_fnames loops through a fname and extracts the animal name, region,
 % receptor and cell type from the filename
 function rslt = parse_fnames( rslt, idx, fname )
-    animal_list =  {'Marilyn', 'Bogota', 'Santiago', 'Benny', 'Azzy'};
+    animal_list =  {'Marilyn', 'Bogota', 'Santiago', 'Benny', 'Ozzy', 'BJ28', 'BJ23'};
     region_list = {'FEF', 'dlPFC'};
-    receptor_list = {'D1R', 'D2R', 'D5R'};
-    celltype_list = {'NeuN', 'Calbindin', 'Calretinin', 'Parvalbumin', 'Somatostatin', 'SMI-32', 'Neurogranin'};     
+    receptor_list = {'D1R', 'D2R', 'D2Rnew' 'D5R'};
+    celltype_list = {'NeuN', 'Calbindin', 'Calretinin', 'Parvalbumin', 'Somatostatin', 'SMI-32', 'Neurogranin', 'CTB'};     
 
     rslt(idx).Animal = find_fname_element( animal_list, fname );
     rslt(idx).Region = find_fname_region( region_list, fname ); %%% FIX FOR DLPFC AND FEF IN SAME NAME

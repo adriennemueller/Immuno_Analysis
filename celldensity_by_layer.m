@@ -62,6 +62,8 @@ function rslt = celldensity_by_layer( sectionstruct, receptor, celltype, region,
     
     rslt.mean = mean( cellden_mat, 2 );
     rslt.ste = std( cellden_mat, 0, 2 ) / sqrt( size(cellden_mat, 2 ) );
+    rslt.std = std( cellden_mat, 0, 2 );
+    rslt.vals = cellden_mat;
     rslt.n_cells = n_cells;
     rslt.n_sections = n_sections;
     
