@@ -50,9 +50,11 @@ function resample_hist_pyrNeuron( straps )
 
     figure(); hold on;
 
-    [n1, x1] = hist( CTB_ratios );
-    [n2, x2] = hist( NRG_ratios );
-    [n3, x3] = hist( SMI_ratios );
+    bin_width = 0.03;
+    
+    [n1, x1] = hist( CTB_ratios, min(CTB_ratios):bin_width:max(CTB_ratios) );
+    [n2, x2] = hist( NRG_ratios, min(NRG_ratios):bin_width:max(NRG_ratios) );
+    [n3, x3] = hist( SMI_ratios, min(SMI_ratios):bin_width:max(SMI_ratios) );
     
     h1 = bar(x1, n1, 'hist' );
     h2 = bar(x2, n2, 'hist' );
@@ -64,9 +66,9 @@ function resample_hist_pyrNeuron( straps )
 
     legend('Extrastriate-Projecting', 'Neurogranin+', 'SMI-32+');
     
-    xlabel( 'Percent D1R+ : Percent D2R+', 'FontSize', 16, 'FontWeight', 'Bold' );
+    xlabel( '% D1R+ : % D2R+', 'FontSize', 16, 'FontWeight', 'Bold' );
     ylabel( 'Bootstrapped Count', 'FontSize', 16, 'FontWeight', 'Bold' );
     set(gca,'FontSize', 14)
-    ylim( [0 3800] );
+    ylim( [0 3200] );
 
 end
