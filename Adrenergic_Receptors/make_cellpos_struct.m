@@ -1,8 +1,8 @@
 function rslt = make_cellpos_struct()
 
     rslt = struct;    
-
-    folder = '/Volumes/Hnoss/Papers/Dopamine Receptor Expression/Quantification Images/';
+    
+    folder = '/Volumes/Hnoss/Papers/Adrenergic Paper/Cell Counts/';
     % Get a list of all files in the folder with the desired file name pattern.
     filelist_struct = findfiles( folder, '*.xml' );
     filelist = {filelist_struct.name};
@@ -95,10 +95,10 @@ end
 % parse_fnames loops through a fname and extracts the animal name, region,
 % receptor and cell type from the filename
 function rslt = parse_fnames( rslt, idx, fname )
-    animal_list =  {'Marilyn', 'Bogota', 'Santiago', 'Benny', 'Ozzy', 'BJ28', 'BJ23'};
-    region_list = {'FEF', 'dlPFC'};
-    receptor_list = {'D1R', 'D2R', 'D2Rnew' 'D5R'};
-    celltype_list = {'NeuN', 'Calbindin', 'Calretinin', 'Parvalbumin', 'Somatostatin', 'SMI-32', 'Neurogranin', 'CTB'};     
+    animal_list =  {'Ozzy', 'Quito', 'Prince'};
+    region_list = {'FEF'};
+    receptor_list = {'Alpha1AR', 'Alpha2AR', 'Beta1R', 'Beta2R'};
+    celltype_list = {'NeuN', 'Neurogranin', 'RatPyramidal', 'SMI-32', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin', };     
 
     rslt(idx).Animal = find_fname_element( animal_list, fname );
     rslt(idx).Region = find_fname_region( region_list, fname ); %%% FIX FOR DLPFC AND FEF IN SAME NAME
