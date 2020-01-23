@@ -98,7 +98,7 @@ function rslt = parse_fnames( rslt, idx, fname )
     animal_list =  {'Ozzy', 'Quito', 'Prince'};
     region_list = {'FEF'};
     receptor_list = {'Alpha1AR', 'Alpha2AR', 'Beta1R', 'Beta2R'};
-    celltype_list = {'NeuN', 'Neurogranin', 'RatPyramidal', 'SMI-32', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin', };     
+    celltype_list = {'NeuN', 'Neurogranin', 'Rat-Pyramidal', 'SMI-32', 'Parvalbumin', 'Calbindin', 'Calretinin', 'Somatostatin', };     
 
     rslt(idx).Animal = find_fname_element( animal_list, fname );
     rslt(idx).Region = find_fname_region( region_list, fname ); %%% FIX FOR DLPFC AND FEF IN SAME NAME
