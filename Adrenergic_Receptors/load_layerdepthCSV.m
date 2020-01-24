@@ -8,6 +8,12 @@ function rslt = load_layerdepthCSV( filename ) %%% NEED THIS TO BE FULL FILE PAT
 
     columns = {'Area', 'Mean', 'Min', 'Max', 'X', 'Y', 'Ch'};
     csv_data = csvimport( filename, 'columns', columns, 'delimiter', ',' );
-    Y_idx = find(strcmp('Y', columns));
-    rslt = csv_data( :, Y_idx );
+    %Y_idx = find(strcmp('Y', columns));
+    %rslt = csv_data( :, Y_idx );
+    X_idx = find(strcmp('X', columns));
+    rslt = csv_data( :, X_idx );
+
 end
+
+
+

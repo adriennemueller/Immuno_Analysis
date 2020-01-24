@@ -1,7 +1,8 @@
 
+% All four receptors for each neuron type - across layer comparison
 
-% Reconfigure extract_XYVals, Image Size and add_layerdepths so using
-% horizontally oriented section instead of vertically
+% All 8 cell types for each receptor - across layer comparison
 
+% All four receptors for each neuron type - totals
 
-% 
+% All 8 cell types for each neuron - totals

@@ -169,6 +169,17 @@ function rslt = get_img_dimensions( fullfname )
     if(~isempty(curr_im_file))
         curr_im = imread(strcat(folder,curr_im_file));
         [img_y img_x] = size(curr_im);
+        
+        [img_x, img_y] = flip_axes( img_x, img_y );
+        
         rslt = [img_x img_y];
     end
+end
+
+
+function [out_xs, out_ys] = flip_axes( in_xs, in_ys )
+
+    out_xs = in_ys;
+    out_ys = in_xs;
+
 end

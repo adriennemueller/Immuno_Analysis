@@ -14,9 +14,22 @@ function rslt = extract_xy_vals( fname )
             ys(j) = str2double(marker_struct(j).Children(4).Children.Data);
         end
     
+        [xs, ys] = flip_axes( xs, ys );
+        
         rslt(m_number).x = xs;
         rslt(m_number).y = ys;
+        
+        
     end        
 
+
+end
+
+
+
+function [out_xs, out_ys] = flip_axes( in_xs, in_ys )
+
+    out_xs = in_ys;
+    out_ys = in_xs;
 
 end
