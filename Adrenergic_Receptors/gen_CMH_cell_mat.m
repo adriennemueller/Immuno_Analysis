@@ -29,6 +29,50 @@ function [substruct1, substruct2] = gen_substructs( immuno_struct, axis1, axis2 
         celltype2 = 'SMI-32';
         substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype1));
         substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype2));
+    elseif strcmp( axis2, 'Parv_Calb' )
+        region  = 'FEF';
+        receptor = axis1;
+        celltype1 = 'Parvalbumin';
+        celltype2 = 'Calbindin';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype1));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype2));
+    elseif strcmp( axis2, 'Parv_Calr' )
+        region  = 'FEF';
+        receptor = axis1;
+        celltype1 = 'Parvalbumin';
+        celltype2 = 'Calretinin';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype1));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype2));
+    elseif strcmp( axis2, 'Calb_Calr' )
+        region  = 'FEF';
+        receptor = axis1;
+        celltype1 = 'Calbindin';
+        celltype2 = 'Calretinin';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype1));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype2));
+    elseif strcmp( axis1, 'A1R_B1R' )
+        region  = 'FEF';
+        celltype = axis2;
+        receptor1 = 'Alpha1AR';
+        receptor2 = 'Beta1R';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor1) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor2) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+    elseif strcmp( axis1, 'A2R_B1R' )
+        region  = 'FEF';
+        celltype = axis2;
+        receptor1 = 'Alpha2AR';
+        receptor2 = 'Beta1R';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor1) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor2) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+    elseif strcmp( axis1, 'B1R_B2R' )
+        region  = 'FEF';
+        celltype = axis2;
+        receptor1 = 'Beta1R';
+        receptor2 = 'Beta2R';
+        substruct1 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor1) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+        substruct2 = immuno_struct(strcmp({immuno_struct.Stain1}, receptor2) & strcmp({immuno_struct.Region}, region) & strcmp({immuno_struct.Stain2}, celltype));
+        
+        
         
 %         
 %     elseif strcmp(axis1, 'D1RD2R')

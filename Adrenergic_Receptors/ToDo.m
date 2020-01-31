@@ -1,8 +1,7 @@
+% Control Figs- western and absorbed
 
-% All four receptors for each neuron type - across layer comparison
+% Across layers Fig
 
-% All 8 cell types for each receptor - across layer comparison
+% Qualitative Fig
 
-% All four receptors for each neuron type - totals
-
-% All 8 cell types for each neuron - totals
+% Fig legends
