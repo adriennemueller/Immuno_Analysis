@@ -39,10 +39,18 @@ function fig = receptor_by_layer_singlefig( immunostruct )
         Props = vertcat(Counts_Struct(i,:).R_CT_Props);
         
         subplot( 6, 1, i )
-        bar( Props' *100 );
+        b = bar( Props' *100 );
        
+        for j = 1:4
+            if i < 4 % First three plots are excitatory
+                b(j).FaceColor = get_bar_facecolor( 'excit', j );
+            else
+                b(j).FaceColor = get_bar_facecolor( 'inhib', j );
+            end
+        end
+
         ylim( [0 120] ); set(gca, 'ytick', [0:20:100]);
-        title( celltype, 'FontSize', 14, 'FontWeight', 'bold' );
+        title( celltype, 'FontSize', 16, 'FontWeight', 'bold' );
         set(gca,'FontSize',10, 'FontWeight', 'bold');
         set(gca, 'box', 'off' );
        
@@ -67,4 +75,7 @@ function fig = receptor_by_layer_singlefig( immunostruct )
 
 
 end    
+
+
+
    

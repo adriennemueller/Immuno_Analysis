@@ -1,16 +1,17 @@
+% Go through Max's counts and verify they are correct - especially som
+% Tell Max which ones to recount
+% Remove the ones which ought not to be counted
+% Update Figures
+    % Pyramidal (remove spare ns lines)
+    % Inhibitory (remove spare ns lines )
+    % Density + Multi layer (Combine in illustrator)
+% Update all 3 tables
+
+
 % Control Figs- western and absorbed
 
-% Qualitative Fig
+% Sort out colors ( Pyramidal neuron colors / xlabels / organisation )
 
 % Fig legends
 
-- 3 + 3
-- Update figures with that
-- Figure Legends
-- Control Figure
-- Move C into B and remove ns label; and perform tests for other comparisons
-- Table of all chi squ pvalue results and actual proportions and Ns.
-- Remove layer 1 
-- Consider "Number of neurons" vs "Proportion" if not too busy
 
-Also - include somatostatin information in table and in text (inhibitory section).

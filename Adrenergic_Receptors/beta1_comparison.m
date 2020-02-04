@@ -11,7 +11,8 @@ function beta1_comparison( immuno_struct )
     
     cmp = colormap(lines(4));    
     yellow_col = cmp(3,:);
-    b1_inhib = bar( B1R_Inhib, 'FaceColor', yellow_col );
+    b1_inhib = bar( B1R_Inhib );
+    b1_inhib.FaceColor = get_bar_facecolor( 'inhib', 3 ); % 3 is the beta1 index
     hold on;
      
     % P-Values 
@@ -34,7 +35,7 @@ function beta1_comparison( immuno_struct )
     xpos2 = [b1_inhib.XData(1), b1_inhib.XData(3)];
     xpos3 = [b1_inhib.XData(2), b1_inhib.XData(3)];
     sigstar( {xpos1, xpos2, xpos3}, B1R_Inhib_pval_list);    
-
+    
     ylim( [0 100] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'Parvalbumin', 'Calbindin', 'Calretinin'});
     ylabel( {'% of Neurons with'; 'Beta1 Receptors'}, 'FontSize', 12, 'FontWeight', 'bold' );
@@ -101,6 +102,10 @@ function beta1_comparison( immuno_struct )
     cr_xpos3 = [b(1).XData(3) + b(3).XOffset, b(1).XData(3) + b(4).XOffset];
     sigstar( {cr_xpos1, cr_xpos2, cr_xpos3}, Calr_pval_list);    
 
+    for j = 1:4
+        b(j).FaceColor = get_bar_facecolor( 'inhib', j );
+    end
+    
     ylim( [0 110] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'Parvalbumin', 'Calbindin', 'Calretinin'});
     ylabel( {'% of Neurons with'; 'Receptor Type'}, 'FontSize', 12, 'FontWeight', 'bold' );

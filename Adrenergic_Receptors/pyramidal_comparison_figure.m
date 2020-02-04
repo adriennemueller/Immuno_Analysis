@@ -67,6 +67,12 @@ function pyr_fig = pyramidal_comparison_figure( immuno_struct )
     nrg_xpos4 = [b(1).XData(4) + b(2).XOffset, b(1).XData(4) + b(3).XOffset];
     sigstar( {nrg_xpos1, nrg_xpos2, nrg_xpos3, nrg_xpos4}, NRG_pval_list);    
 
+    for i = 1:4
+        for j = 1:3
+            b(j).FaceColor = 'flat';
+            b(j).CData(i,:) = get_bar_facecolor( 'excit', i );
+        end
+    end
     
     %lb_col = [0.76 0.88 0.92]; db_col = [0.32 0.68 0.80];
     %lg_col = [0.79 0.94 0.82]; dg_col = [0.56 0.87 0.63];
