@@ -67,10 +67,11 @@ function pyr_fig = pyramidal_comparison_figure( immuno_struct )
     nrg_xpos4 = [b(1).XData(4) + b(2).XOffset, b(1).XData(4) + b(3).XOffset];
     sigstar( {nrg_xpos1, nrg_xpos2, nrg_xpos3, nrg_xpos4}, NRG_pval_list);    
 
+    pyramidal_name_list = {'Neurogranin', 'RatPyramidal', 'SMI32'};
     for i = 1:4
         for j = 1:3
             b(j).FaceColor = 'flat';
-            b(j).CData(i,:) = get_bar_facecolor( 'excit', i );
+            b(j).CData(i,:) = get_bar_facecolor( pyramidal_name_list{j}, i );
         end
     end
     

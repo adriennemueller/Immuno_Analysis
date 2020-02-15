@@ -41,13 +41,18 @@ function fig = receptor_by_layer_singlefig( immunostruct )
         subplot( 6, 1, i )
         b = bar( Props' *100 );
        
+        celltype_bar_color_list = {'Neurogranin', 'RatPyramidal', 'SMI32', 'Parvalbumin', 'Calbindin', 'Calretinin'};
         for j = 1:4
-            if i < 4 % First three plots are excitatory
-                b(j).FaceColor = get_bar_facecolor( 'excit', j );
-            else
-                b(j).FaceColor = get_bar_facecolor( 'inhib', j );
-            end
+            b(j).FaceColor = get_bar_facecolor( celltype_bar_color_list{i}, j );
         end
+        
+%         for j = 1:4
+%             if i < 4 % First three plots are excitatory
+%                 b(j).FaceColor = get_bar_facecolor( celltype_list(i), j );
+%             else
+%                 b(j).FaceColor = get_bar_facecolor( 'inhib', j );
+%             end
+%         end
 
         ylim( [0 120] ); set(gca, 'ytick', [0:20:100]);
         title( celltype, 'FontSize', 16, 'FontWeight', 'bold' );

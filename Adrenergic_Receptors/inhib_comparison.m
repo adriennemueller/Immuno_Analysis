@@ -170,10 +170,27 @@ function inhib_comparison( immuno_struct )
     figure(); 
     
     b = bar( [Parv_Rs; Calb_Rs; Calr_Rs] );
-    for j = 1:4
-        b(j).FaceColor = get_bar_facecolor( 'inhib', j );
-    end
+%     for j = 1:4
+%         b(j).FaceColor = get_bar_facecolor( 'inhib', j );
+%     end
     hold on;
+    
+    inhib_name_list = {'Parvalbumin', 'Calbindin', 'Calretinin'};
+    for j = 1:4
+        for i = 1:3
+            b(j).FaceColor = 'flat';
+            b(j).CData(i,:) = get_bar_facecolor( inhib_name_list{i}, j );
+        end
+    end
+    
+%     for i = 1:4
+%         for j = 1:3
+%             b(j).FaceColor = 'flat';
+%             b(j).CData(i,:) = get_bar_facecolor( inhib_name_list{j}, i );
+%         end
+%     end
+    
+    
     
     % Cell Type Significance Stars
     pv_xpos1 = [b(1).XData(1) + b(1).XOffset, b(1).XData(1) + b(2).XOffset];
@@ -206,40 +223,40 @@ function inhib_comparison( immuno_struct )
     a1ar_xpos2 = [b(1).XData(1) + b(1).XOffset, b(1).XData(3) + b(1).XOffset];
     a1ar_xpos3 = [b(1).XData(2) + b(1).XOffset, b(1).XData(3) + b(1).XOffset];
     a1ar_ss = sigstar({a1ar_xpos1, a1ar_xpos2, a1ar_xpos3}, A1AR_Inhib_pval_list);
-    set( a1ar_ss, 'color', get_bar_facecolor( 'inhib', 1 ) );
+    set( a1ar_ss, 'color', get_bar_facecolor( 'greyscale', 1 ) );
     
     a2ar_xpos1 = [b(1).XData(1) + b(2).XOffset, b(1).XData(2) + b(2).XOffset];
     a2ar_xpos2 = [b(1).XData(1) + b(2).XOffset, b(1).XData(3) + b(2).XOffset];
     a2ar_xpos3 = [b(1).XData(2) + b(2).XOffset, b(1).XData(3) + b(2).XOffset];
     a2ar_ss = sigstar({a2ar_xpos1, a2ar_xpos2, a2ar_xpos3}, A2AR_Inhib_pval_list);
-    set( a2ar_ss, 'color', get_bar_facecolor( 'inhib', 2 ) );
+    set( a2ar_ss, 'color', get_bar_facecolor( 'greyscale', 2 ) );
     
     b1r_xpos1 = [b(1).XData(1) + b(3).XOffset, b(1).XData(2) + b(3).XOffset];
     b1r_xpos2 = [b(1).XData(1) + b(3).XOffset, b(1).XData(3) + b(3).XOffset];
     b1r_xpos3 = [b(1).XData(2) + b(3).XOffset, b(1).XData(3) + b(3).XOffset];
     b1r_ss = sigstar({b1r_xpos1, b1r_xpos2, b1r_xpos3}, B1R_Inhib_pval_list);
-    set( b1r_ss, 'color', get_bar_facecolor( 'inhib', 3 ) );
+    set( b1r_ss, 'color', get_bar_facecolor( 'greyscale', 3 ) );
     
     b2r_xpos1 = [b(1).XData(1) + b(4).XOffset, b(1).XData(2) + b(4).XOffset];
     b2r_xpos2 = [b(1).XData(1) + b(4).XOffset, b(1).XData(3) + b(4).XOffset];
     b2r_xpos3 = [b(1).XData(2) + b(4).XOffset, b(1).XData(3) + b(4).XOffset];
     b2r_ss = sigstar({b2r_xpos1, b2r_xpos2, b2r_xpos3}, B2R_Inhib_pval_list);
-    set( b2r_ss, 'color', get_bar_facecolor( 'inhib', 4 ) );
+    set( b2r_ss, 'color', get_bar_facecolor( 'greyscale', 4 ) );
     
     
-    ylim( [0 110] ); set(gca, 'ytick', [0:20:100]);
+    ylim( [0 200] ); set(gca, 'ytick', [0:20:100]);
     set(gca,'XTickLabel',{'Parvalbumin', 'Calbindin', 'Calretinin'});
     ylabel( {'% of Neurons with'; 'Receptor Type'}, 'FontSize', 12, 'FontWeight', 'bold' );
     set(gca,'FontSize',10, 'FontWeight', 'bold');
     
-    legend('Alpha1AR', 'Alpha2AR', 'Beta1R', 'Beta2R' );
+    legend({'Alpha1AR', 'Alpha2AR', 'Beta1R', 'Beta2R'}, 'Location', 'northwest' );
 
     set(gcf, 'Units', 'centimeters' );
     %set(gcf, 'Position', [30, 30, 8.6, 7.2])
     set(gca, 'box', 'off' );
     tightfig( gcf );
     resize_paper_for_pdf( gcf );
-    save_out_fig( gcf, strcat('Beta1R_vs_Inhibitory_Neurons_Proportions_2') );
+    save_out_fig( gcf, strcat('Inhibitory_Neurons_Proportions') );
 
 
 

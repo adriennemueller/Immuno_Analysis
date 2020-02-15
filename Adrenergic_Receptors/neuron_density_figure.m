@@ -68,6 +68,11 @@ function neuron_density_figure( immuno_struct )
         errorbar( err_x, err_y .* mm_factor, R_by_Layer_STEs(:,i) .* mm_factor, 'k', 'linestyle', 'none', 'HandleVisibility','off' );
     end 
     
+    for i = 1:4
+        a(i).FaceColor = get_bar_facecolor( 'greyscale', i );
+    end
+    
+    
     hold off;
 
     
@@ -93,12 +98,17 @@ function neuron_density_figure( immuno_struct )
         errorbar( err_x, err_y .* mm_factor, CT_by_Layer_STEs(:,i) .* mm_factor, 'k', 'linestyle', 'none', 'HandleVisibility','off' );
     end
     
+%     for j = 1:6
+%         if j < 4 % First three plots are excitatory
+%             b(j).FaceColor = get_bar_facecolor( 'excit', j );
+%         else
+%             b(j).FaceColor = get_bar_facecolor( 'inhib', j - 3 );
+%         end
+%     end
+
+    celltype_bar_color_list = {'Neurogranin', 'RatPyramidal', 'SMI32', 'Parvalbumin', 'Calbindin', 'Calretinin'};
     for j = 1:6
-        if j < 4 % First three plots are excitatory
-            b(j).FaceColor = get_bar_facecolor( 'excit', j );
-        else
-            b(j).FaceColor = get_bar_facecolor( 'inhib', j - 3 );
-        end
+        b(j).FaceColor = get_bar_facecolor( celltype_bar_color_list{j}, 5 );
     end
     
     set(gcf, 'Units', 'centimeters' );
