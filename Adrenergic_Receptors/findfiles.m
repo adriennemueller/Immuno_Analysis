@@ -5,6 +5,8 @@ function [ files ] = findfiles( folder, pattern )
     matches = dir(fullfile(folder, pattern));
     % Don't return folders
     matches = matches([matches.isdir] == 0);
+    % Don't include MacOSX junk
+    matches = matches(~startsWith({matches.name}, "._"));
 
     % Return full file names
     for i = 1: length(matches)
@@ -27,4 +29,3 @@ function [ files ] = findfiles( folder, pattern )
     end
 
 end
-
