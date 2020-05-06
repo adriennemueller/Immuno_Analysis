@@ -44,6 +44,34 @@ function neuron_density_figure( immuno_struct )
     
     mm_factor = 1000000;
     
+    %%% Anova %%%
+    A1AR_mat = A1AR_by_Layer_struct.vals;
+    A2AR_mat = A2AR_by_Layer_struct.vals;
+    B1R_mat  = B1R_by_Layer_struct.vals;
+    B2R_mat  = B2R_by_Layer_struct.vals;
+    receptor_mat = horzcat( A1AR_mat, A2AR_mat, B1R_mat, B2R_mat);
+    
+    A1AR_receptor_label = ones( size(A1AR_mat ) );
+    A2AR_receptor_label = ones( size(A2AR_mat ) ) .* 2;
+    B1R_receptor_label  = ones( size(B1R_mat ) )  .* 3;
+    B2R_receptor_label  = ones( size(B2R_mat ) )  .* 4;
+    receptor_label = horzcat(A1AR_receptor_label, A2AR_receptor_label, B1R_receptor_label, B2R_receptor_label );
+    
+    layer_label = ones(size(receptor_mat));
+    layer_label(2,:) = layer_label(2,:) .*2;
+    layer_label(3,:) = layer_label(3,:) .*4;
+    layer_label(4,:) = layer_label(4,:) .*5;
+    layer_label(5,:) = layer_label(5,:) .*6;
+
+    receptor_vec    = receptor_mat(:)';
+    r_label_vec     = receptor_label(:)';
+    layer_label_vec = layer_label(:)';
+    
+    [p, tbl] = anovan(receptor_vec, {r_label_vec, layer_label_vec}, 'varnames', {'Receptor', 'Layer'} );
+    
+    %[p, tbl] = anovan(receptor_vec, {r_label_vec, layer_label_vec}, 'varnames', {'Receptor', 'Layer'}, 'model', 'interaction' );
+    
+    
     figure();
     subplot(2,1,1);
     hold on;
